@@ -29,7 +29,7 @@ public class Main
             gr.add(matr);
            // visual.Draw(physSys.centralize(400, 400), matr);
         }
-        Visual visual = new Visual();
+        Visual visual = new Visual(params.width, params.height);
         visual.Draw(r, gr);
     }
 }

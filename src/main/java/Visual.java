@@ -4,6 +4,14 @@ import java.util.ArrayList;
 
 public class Visual
 {
+    private final int width;
+    private final int height;
+
+    public Visual(int width, int height)
+    {
+        this.width = width;
+        this.height = height;
+    }
     public void Draw(final ArrayList<double[]> rArray, final ArrayList<int[][]> grArray)
     {
         JFrame jf = new JFrame("Graph"){
@@ -24,7 +32,7 @@ public class Visual
             }
         };
 
-        jf.setSize(800, 800);
+        jf.setSize(this.width, this.height);
         jf.setVisible(true);
 
     }
