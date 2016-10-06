@@ -48,4 +48,38 @@ public class Graph
         fin.close() ;
         return Integer.parseInt(fileContent.get(0));
     }
+
+    public int[][] createMatrix(int countVertex)
+    {
+        int[][] resultMatrix = new int[countVertex][countVertex];
+        for (int i = 0; i < countVertex; i++)
+        {
+            for (int j = 0; j < countVertex; j++)
+            {
+                if (i == j)
+                {
+                    resultMatrix[i][j] = 0;
+                }
+                else
+                {
+                    resultMatrix[i][j] = 1;
+                }
+            }
+        }
+
+        return resultMatrix;
+    }
+
+    public double[] getCoord(int[][] matr,Params params, int centX, int centY, int deviationX, int deviationY)
+    {
+        Models models = new Models(matr, params);
+        PhysSys physSys = new PhysSys(models);
+        ArrayList<Double> energy = new ArrayList<Double>();
+        for (int i = 0; i < 256; i++)
+        {
+            physSys.step();
+            energy.add(models.SpringChargeEnergy(physSys.r));
+        }
+        return physSys.centralize(centX, centY, deviationX, deviationY);
+    }
 }

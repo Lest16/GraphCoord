@@ -2,5 +2,5 @@ gamma = 0.4
 meanSpringLength = 250
 spring = 5
 q2 = 20000
-width = 800
-height = 800
+width = 1000
+height = 1000

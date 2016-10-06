@@ -5,30 +5,32 @@ public class Main
     public static void main(String[] args) throws Exception
     {
         Graph graph = new Graph();
-        ArrayList<int[][]> graphList = graph.readGraphs();
-        int countDot = graph.readCountDot();
         Params params = new Params();
+        ArrayList<int[][]> graphList = graph.readGraphs();
+        int[][] mainMatr = graph.createMatrix(graphList.size());
+        params.meanSpringLength = ((params.height + params.width) / 2) / 2;
+        double[] coordVertexMainGraph = graph.getCoord(mainMatr, params, params.width / 2, params.height / 2, 0, 0);
+
+
+
+        int countDot = graph.readCountDot();
+
         ArrayList<double[]> r = new ArrayList<double[]>();
         ArrayList<int[][]> gr = new ArrayList<int[][]>();
-        int j = 0;
-        int m = 0;
+        params.meanSpringLength = ((params.height + params.width) / 2) / graphList.size();
+        for (int l = 0; l < mainMatr.length; ++l) {
+            r.add(graph.getCoord(mainMatr, params, params.width / 200, params.height / 200, (int)coordVertexMainGraph[2 * l],
+                    (int)coordVertexMainGraph[2 * l + 1]));
+            gr.add(mainMatr);
+        }
+
+/*
         for (int[][] matr: graphList)
         {
-            Models models = new Models(matr, params);
-            PhysSys physSys = new PhysSys(models);
-            ArrayList<Double> energy = new ArrayList<Double>();
-            for (int i = 0; i < 256; i++)
-            {
-                physSys.step();
-                energy.add(models.SpringChargeEnergy(physSys.r));
-            }
-
-            r.add(physSys.centralize(200, 200, j, m));
-            j+=400;
-
+            r.add(graph.getCoord(matr, params));
             gr.add(matr);
-           // visual.Draw(physSys.centralize(400, 400), matr);
         }
+*/
         Visual visual = new Visual(params.width, params.height);
         visual.Draw(r, gr);
     }
