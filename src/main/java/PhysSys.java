@@ -48,7 +48,7 @@ public class PhysSys
             x[i] += dx[i] * 0.001;
     }
 
-    public double[] centralize(double x0, double y0) {
+    public double[] centralize(double x0, double y0, int deviationX, int deviationY) {
         double xm = 0, ym = 0;
         int n = this.r.length / 2;
         for(int i = 0; i < n; ++i) {
@@ -60,8 +60,8 @@ public class PhysSys
         double[] a = new double[r.length];
         System.arraycopy(r, 0, a, 0, a.length);
         for(int j = 0; j < n; ++j) {
-            a[2*j] += x0 - xm;
-            a[2*j+1] += y0 - ym;
+            a[2*j] += x0 - xm + deviationX;
+            a[2*j+1] += y0 - ym + deviationY;
         }
         return a;
     }

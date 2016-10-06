@@ -1,4 +1,4 @@
 gamma = 0.4
-meanSpringLength = 450
+meanSpringLength = 250
 spring = 5
 q2 = 20000

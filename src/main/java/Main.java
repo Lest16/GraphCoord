@@ -5,18 +5,31 @@ public class Main
     public static void main(String[] args) throws Exception
     {
         Graph graph = new Graph();
-        int[][] g = graph.readGraph();
+        ArrayList<int[][]> graphList = graph.readGraphs();
+        int countDot = graph.readCountDot();
         Params params = new Params();
-        Models models = new Models(g, params);
-        PhysSys physSys = new PhysSys(models);
-        ArrayList<Double> energy = new ArrayList<Double>();
-        for (int i = 0; i < 256; i++)
+        ArrayList<double[]> r = new ArrayList<double[]>();
+        ArrayList<int[][]> gr = new ArrayList<int[][]>();
+        int j = 0;
+        int m = 0;
+        for (int[][] matr: graphList)
         {
-            physSys.step();
-            energy.add(models.SpringChargeEnergy(physSys.r));
-        }
+            Models models = new Models(matr, params);
+            PhysSys physSys = new PhysSys(models);
+            ArrayList<Double> energy = new ArrayList<Double>();
+            for (int i = 0; i < 256; i++)
+            {
+                physSys.step();
+                energy.add(models.SpringChargeEnergy(physSys.r));
+            }
 
-        Visual visual = new Visual(physSys.centralize(400, 400), g);
-        visual.Draw();
+            r.add(physSys.centralize(200, 200, j, m));
+            j+=400;
+
+            gr.add(matr);
+           // visual.Draw(physSys.centralize(400, 400), matr);
+        }
+        Visual visual = new Visual();
+        visual.Draw(r, gr);
     }
 }

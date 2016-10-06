@@ -6,9 +6,10 @@ import java.util.List;
 
 public class Graph
 {
-    public int[][] readGraph() throws Exception
+    public ArrayList<int[][]> readGraphs() throws Exception
     {
         int[][] matrix;
+        ArrayList<int[][]> graphList = new ArrayList<int[][]>();
         BufferedReader fin = new BufferedReader( new InputStreamReader(new FileInputStream("src/main/resources/data")));
         List<String> fileContent = new ArrayList<String>() ;
         String str ;
@@ -17,18 +18,34 @@ public class Graph
             fileContent.add(str);
         }
 
-        fin.close() ;
-        String[] splitLineInit = fileContent.get(0).split(" ");
-        matrix = new int[fileContent.size()][splitLineInit.length];
-        for (int i = 0; i < fileContent.size(); i++)
-        {
-            for (int j = 0; j < splitLineInit.length; j++)
-            {
+        fin.close();
+        int k = 0;
+        while ((k - 1) != fileContent.size()) {
+            String[] splitLineInit = fileContent.get(k).split(" ");
+            matrix = new int[splitLineInit.length][splitLineInit.length];
+            for (int i = k; i < splitLineInit.length + k; i++) {
                 String line = fileContent.get(i);
                 String[] splitLine = line.split(" ");
-                matrix[i][j] = Integer.parseInt(splitLine[j]);
+                for (int j = 0; j < splitLineInit.length; j++) {
+                    matrix[i - k][j] = Integer.parseInt(splitLine[j]);
+                }
             }
+            graphList.add(matrix);
+            k += splitLineInit.length + 1;
         }
-        return matrix;
+        return graphList;
+    }
+
+    public int readCountDot() throws Exception {
+        BufferedReader fin = new BufferedReader( new InputStreamReader(new FileInputStream("src/main/resources/countDot")));
+        List<String> fileContent = new ArrayList<String>() ;
+        String str;
+        while( (str = fin.readLine() ) != null )
+        {
+            fileContent.add(str);
+        }
+
+        fin.close() ;
+        return Integer.parseInt(fileContent.get(0));
     }
 }
