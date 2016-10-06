@@ -10,27 +10,18 @@ public class Main
         int[][] mainMatr = graph.createMatrix(graphList.size());
         params.meanSpringLength = ((params.height + params.width) / 2) / 2;
         double[] coordVertexMainGraph = graph.getCoord(mainMatr, params, params.width / 2, params.height / 2, 0, 0);
-
-
-
         int countDot = graph.readCountDot();
 
         ArrayList<double[]> r = new ArrayList<double[]>();
         ArrayList<int[][]> gr = new ArrayList<int[][]>();
         params.meanSpringLength = ((params.height + params.width) / 2) / graphList.size();
         for (int l = 0; l < mainMatr.length; ++l) {
-            r.add(graph.getCoord(mainMatr, params, params.width / 200, params.height / 200, (int)coordVertexMainGraph[2 * l],
+            params.meanSpringLength = ((params.height + params.width) / 2) / graphList.get(l).length;
+            r.add(graph.getCoord(graphList.get(l), params, 1, 1, (int)coordVertexMainGraph[2 * l],
                     (int)coordVertexMainGraph[2 * l + 1]));
-            gr.add(mainMatr);
+            gr.add(graphList.get(l));
         }
 
-/*
-        for (int[][] matr: graphList)
-        {
-            r.add(graph.getCoord(matr, params));
-            gr.add(matr);
-        }
-*/
         Visual visual = new Visual(params.width, params.height);
         visual.Draw(r, gr);
     }
