@@ -70,7 +70,7 @@ public class Graph
         return resultMatrix;
     }
 
-    public double[] getCoord(int[][] matr,Params params, int centX, int centY, int deviationX, int deviationY)
+    public double[] getCoord(int[][] matr,Params params, double centX, double centY, int deviationX, int deviationY)
     {
         Models models = new Models(matr, params);
         PhysSys physSys = new PhysSys(models);

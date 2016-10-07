@@ -12,7 +12,7 @@ public class Visual
         this.width = width;
         this.height = height;
     }
-    public void Draw(final ArrayList<double[]> rArray, final ArrayList<int[][]> grArray)
+    public void Draw(final ArrayList<double[]> rArray, final ArrayList<int[][]> grArray, final int countDot, final int distance)
     {
         JFrame jf = new JFrame("Graph"){
             public void paint(Graphics g) {
@@ -28,6 +28,12 @@ public class Visual
                         g.drawOval((int) rArray.get(k)[2 * l], (int) rArray.get(k)[2 * l + 1], 12, 12);
                         g.fillOval((int) rArray.get(k)[2 * l], (int) rArray.get(k)[2 * l + 1], 12, 12);
                     }
+                }
+                int startPos = 10;
+                for (int l = 0; l < countDot; ++l) {
+                    g.drawOval(startPos, 35, 12, 12);
+                    g.fillOval(startPos, 35, 12, 12);
+                    startPos += distance;
                 }
             }
         };
