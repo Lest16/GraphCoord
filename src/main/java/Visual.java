@@ -12,7 +12,8 @@ public class Visual
         this.width = width;
         this.height = height;
     }
-    public void Draw(final ArrayList<double[]> rArray, final ArrayList<int[][]> grArray, final int countDot, final int distance)
+
+    public void Draw(final ArrayList<double[]> rArray, final ArrayList<int[][]> grArray, final ArrayList<Integer> sizeDotList, final int distance, final ArrayList<int[]> sizesVertex)
     {
         JFrame jf = new JFrame("Graph"){
             public void paint(Graphics g) {
@@ -22,17 +23,19 @@ public class Visual
                     for (int i = 0; i < grArray.get(k).length; ++i)
                         for (int j = i + 1; j < grArray.get(k).length; ++j)
                             if (grArray.get(k)[i][j] == 1)
-                                g.drawLine((int) rArray.get(k)[2 * i], (int) rArray.get(k)[2 * i + 1], (int) rArray.get(k)[2 * j], (int) rArray.get(k)[2 * j + 1]);
+                                g.drawLine((int) rArray.get(k)[2 * i], (int) rArray.get(k)[2 * i + 1], (int) rArray.get(k)[2 * j],
+                                        (int) rArray.get(k)[2 * j + 1]);
 
                     for (int l = 0; l < grArray.get(k).length; ++l) {
-                        g.drawOval((int) rArray.get(k)[2 * l], (int) rArray.get(k)[2 * l + 1], 12, 12);
-                        g.fillOval((int) rArray.get(k)[2 * l], (int) rArray.get(k)[2 * l + 1], 12, 12);
+                        g.drawOval((int) rArray.get(k)[2 * l], (int) rArray.get(k)[2 * l + 1], sizesVertex.get(k)[l], sizesVertex.get(k)[l]);
+                        g.fillOval((int) rArray.get(k)[2 * l], (int) rArray.get(k)[2 * l + 1], sizesVertex.get(k)[l], sizesVertex.get(k)[l]);
                     }
                 }
                 int startPos = 10;
-                for (int l = 0; l < countDot; ++l) {
-                    g.drawOval(startPos, 35, 12, 12);
-                    g.fillOval(startPos, 35, 12, 12);
+                for (int l = 0; l < sizeDotList.size(); ++l) {
+                    Integer size = sizeDotList.get(l);
+                    g.drawOval(startPos, 35, size, size);
+                    g.fillOval(startPos, 35, size, size);
                     startPos += distance;
                 }
             }

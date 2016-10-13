@@ -36,7 +36,7 @@ public class Graph
         return graphList;
     }
 
-    public int readCountDot() throws Exception {
+    public ArrayList<Integer> readDot() throws Exception {
         BufferedReader fin = new BufferedReader( new InputStreamReader(new FileInputStream("src/main/resources/countDot")));
         List<String> fileContent = new ArrayList<String>() ;
         String str;
@@ -46,7 +46,18 @@ public class Graph
         }
 
         fin.close() ;
-        return Integer.parseInt(fileContent.get(0));
+        if (fileContent.size() == 0)
+        {
+            return new ArrayList<Integer>();
+        }
+        String[] splitSizeDot = fileContent.get(0).split(" ");
+        ArrayList<Integer> sizeDotList = new ArrayList<Integer>();
+        for (String size: splitSizeDot)
+        {
+            sizeDotList.add(Integer.parseInt(size));
+        }
+
+        return sizeDotList;
     }
 
     public int[][] createMatrix(int countVertex)
@@ -68,6 +79,33 @@ public class Graph
         }
 
         return resultMatrix;
+    }
+
+    public ArrayList<int []> getSizesVertex() throws Exception
+    {
+        BufferedReader fin = new BufferedReader( new InputStreamReader(new FileInputStream("src/main/resources/sizesVertex")));
+        List<String> fileContent = new ArrayList<String>() ;
+        String str;
+        while( (str = fin.readLine() ) != null )
+        {
+            fileContent.add(str);
+        }
+
+        fin.close();
+        ArrayList<int []> listSizes = new ArrayList<int[]>();
+        for (int i = 0; i < fileContent.size(); i++)
+        {
+            String[] splitSizeVertex = fileContent.get(i).split(" ");
+            int [] sizesVertex = new int[splitSizeVertex.length];
+            for(int j = 0; j < splitSizeVertex.length; j++)
+            {
+                sizesVertex[j] = Integer.parseInt(splitSizeVertex[j]);
+            }
+
+            listSizes.add(sizesVertex);
+        }
+
+        return listSizes;
     }
 
     public double[] getCoord(int[][] matr,Params params, double centX, double centY, int deviationX, int deviationY)
