@@ -31,7 +31,7 @@ public class PhysSys
         this.add(this.v, fv);
         this.add(this.r, this.v);
         this.CountIteration++;
-        if (this.CountIteration == 1000)
+        if (this.CountIteration == 500)
         {
             this.CountIteration = 0;
             return;

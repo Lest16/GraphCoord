@@ -21,7 +21,7 @@ public class Main
         ArrayList<int[][]> gr = new ArrayList<int[][]>();
         for (int l = 0; l < mainMatr.length; ++l) {
             params.meanSpringLength = ((params.height + params.width - indent)) / (graphList.get(l).length * graphList.size());
-            r.add(graph.getCoord(graphList.get(l), params, 0, 0, (int)coordVertexMainGraph[2 * l],
+                    r.add(graph.getCoord(graphList.get(l), params, 0, 0, (int)coordVertexMainGraph[2 * l],
                     (int)coordVertexMainGraph[2 * l + 1]));
             gr.add(graphList.get(l));
         }
