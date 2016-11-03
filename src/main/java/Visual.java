@@ -16,6 +16,8 @@ public class Visual
     public void Draw(final ArrayList<double[]> coordList, final ArrayList<int[][]> adjacencyMatrixList, final ArrayList<Integer> sizeDotList, final int distance, final ArrayList<ArrayList<Vertex>> allVertices)
     {
         JFrame jf = new JFrame("Graph"){
+            public int radius;
+            public int maxLenght;
             public ArrayList<Integer> listCoordCaptionX = new ArrayList<Integer>();
             public ArrayList<Integer> listCoordCaptionY = new ArrayList<Integer>();
 
@@ -36,9 +38,10 @@ public class Visual
                                 allVertices.get(k).get(l).size, allVertices.get(k).get(l).size);
                         String[] caption = allVertices.get(k).get(l).caption.split(" ");
                         //int y = (int) rArray.get(k)[2 * l + 1] + 10;
-
-                        int x = this.getCoordX(caption, (int)coordList.get(k)[2 * l], (int)coordList.get(k)[2 * l + 1]);
-                        int y = this.getCoordY(caption, x, (int)coordList.get(k)[2 * l + 1]);
+                        this.maxLenght = GetMaxLenght(caption);
+                        this.radius = GetRadius(caption, maxLenght);
+                        int x = this.getCoordX(maxLenght, radius, (int)coordList.get(k)[2 * l], (int)coordList.get(k)[2 * l + 1]);
+                        int y = this.getCoordY(maxLenght, radius, (int)coordList.get(k)[2 * l], (int)coordList.get(k)[2 * l + 1]);
                         for (int m = 0; m < caption.length; m++)
                         {
                             //g.drawString(caption[m], (int) rArray.get(k)[2 * l] + 10, y);
@@ -57,58 +60,50 @@ public class Visual
                 }
             }
 
-            private int getCoordX(String[] caption, int x, int y)
+
+
+            private int getCoordX(int maxLenght, int radius, int x, int y)
             {
-                int maxLenght = caption[0].length();
-
-                for (int i = 1; i < caption.length; i++)
-                {
-                    if(caption[i].length() > maxLenght)
-                    {
-                        maxLenght = caption[i].length();
-                    }
-                }
-                int radius = 0;
-                if (maxLenght > caption.length)
-                {
-                    radius = maxLenght * 10;
-                }
-                else
-                {
-                    radius = caption.length * 10;
-                }
-
                 ArrayList<Integer> listCoordX = new ArrayList<Integer>();
                 ArrayList<Integer> listCoordY = new ArrayList<Integer>();
+                boolean isLeft = true;
+                boolean isRight = true;
                 for(int i = 0; i < coordList.size(); i++)
                 {
                     for (int j = 0; j < adjacencyMatrixList.get(i).length; j++)
                     {
-                        if ((Math.abs(coordList.get(i)[2 * j] - x) <= radius) && (Math.abs(coordList.get(i)[2 * j + 1] - y) <= radius)
-                                && ((int)coordList.get(i)[2 * j] != x) && ((int)coordList.get(i)[2 * j + 1] != y))
+                        double a = Math.abs(coordList.get(i)[2 * j] - x);
+                        double b = Math.abs(coordList.get(i)[2 * j + 1] - y);
+                        int c = (int)coordList.get(i)[2 * j];
+                        int d = (int)coordList.get(i)[2 * j + 1];
+                        if ((a <= radius) && (b <= radius) && (c != x) && (d != y))
                         {
                             listCoordX.add((int)coordList.get(i)[2 * j]);
                             listCoordY.add((int)coordList.get(i)[2 * j + 1]);
                         }
+
+                        if (x < coordList.get(i)[2 * j])
+                        {
+                            isLeft = false;
+                        }
+
+                        if (x > coordList.get(i)[2 * j])
+                        {
+                            isRight = false;
+                        }
                     }
                 }
 
-                for (int i = 0; i < listCoordCaptionX.size(); i++)
+             /*   for (int i = 0; i < listCoordCaptionX.size(); i++)
                 {
-                    if (Math.abs(listCoordCaptionX.get(i) - x) <= radius)
+                    double e = Math.abs(listCoordCaptionX.get(i) - x);
+                    if (e <= radius)
                     {
                         listCoordX.add(this.listCoordCaptionX.get(i));
                     }
-                }
+                }*/
 
-
-
-
-
-
-
-
-                boolean isLeft = true;
+          /*      boolean isLeft = true;
                 for(int i = 0; i < listCoordX.size(); i++)
                 {
                    if (x < listCoordX.get(i))
@@ -116,22 +111,22 @@ public class Visual
                        isLeft = false;
                        break;
                    }
-                }
+                }*/
                 if (isLeft)
                 {
                     this.listCoordCaptionX.add(x + 10);
                     return x + 10;
                 }
 
-                boolean isRight = true;
-                for(int i = 0; i < listCoordX.size(); i++)
+              //  boolean isRight = true;
+             /*   for(int i = 0; i < listCoordX.size(); i++)
                 {
                     if (x > listCoordX.get(i))
                     {
                         isRight = false;
                         break;
                     }
-                }
+                }*/
                 if (isRight)
                 {
                     this.listCoordCaptionX.add(x - (maxLenght * 7));
@@ -196,42 +191,40 @@ public class Visual
 
 
 
-            private int getCoordY(String[] caption, int x, int y)
+            private int getCoordY(int maxLenght, int radius,  int x, int y)
             {
-                int maxLenght = caption[0].length();
-
-                for (int i = 1; i < caption.length; i++)
-                {
-                    if(caption[i].length() > maxLenght)
-                    {
-                        maxLenght = caption[i].length();
-                    }
-                }
-                int radius = 0;
-                if (maxLenght > caption.length)
-                {
-                    radius = maxLenght * 10;
-                }
-                else
-                {
-                    radius = caption.length * 10;
-                }
-
                 ArrayList<Integer> listCoordX = new ArrayList<Integer>();
                 ArrayList<Integer> listCoordY = new ArrayList<Integer>();
+                boolean isTop = true;
+                boolean isBottom = true;
                 for(int i = 0; i < coordList.size(); i++)
                 {
                     for (int j = 0; j < adjacencyMatrixList.get(i).length; j++)
                     {
-                        if ((Math.abs(coordList.get(i)[2 * j] - x) <= radius) && (Math.abs(coordList.get(i)[2 * j + 1] - y) <= radius)
-                                && ((int)coordList.get(i)[2 * j] != x) && ((int)coordList.get(i)[2 * j + 1] != y))
+                        double a = Math.abs(coordList.get(i)[2 * j] - x);
+                        double b = Math.abs(coordList.get(i)[2 * j + 1] - y);
+                        int c = (int)coordList.get(i)[2 * j];
+                        int d = (int)coordList.get(i)[2 * j + 1];
+                        if ((a <= radius) && (b <= radius) && (c != x) && (d != y))
                         {
                             listCoordX.add((int)coordList.get(i)[2 * j]);
                             listCoordY.add((int)coordList.get(i)[2 * j + 1]);
                         }
+
+                        if (y < coordList.get(i)[2 * j + 1])
+                        {
+                            isTop = false;
+
+                        }
+
+                        if (y > coordList.get(i)[2 * j + 1])
+                        {
+                            isTop = false;
+
+                        }
                     }
                 }
-                for (int i = 0; i < listCoordCaptionX.size(); i++)
+      /*          for (int i = 0; i < listCoordCaptionX.size(); i++)
                 {
                     if (Math.abs(listCoordCaptionX.get(i) - x) <= radius)
                     {
@@ -245,14 +238,11 @@ public class Visual
                     {
                         listCoordY.add(this.listCoordCaptionY.get(i));
                     }
-                }
+                }*/
                // listCoordY.addAll(this.listCoordCaptionY);
 
 
-
-
-
-                boolean isTop = true;
+               /* boolean isTop = true;
                 for(int i = 0; i < listCoordY.size(); i++)
                 {
                     if (y < listCoordY.get(i))
@@ -260,14 +250,14 @@ public class Visual
                         isTop = false;
                         break;
                     }
-                }
+                }*/
                 if (isTop)
                 {
                     this.listCoordCaptionY.add(y + 20);
                     return y + 20;
                 }
 
-                boolean isBottom = true;
+             /*   boolean isBottom = true;
                 for(int i = 0; i < listCoordY.size(); i++)
                 {
                     if (y > listCoordY.get(i))
@@ -275,20 +265,12 @@ public class Visual
                         isBottom = false;
                         break;
                     }
-                }
+                }*/
                 if (isBottom)
                 {
-                    this.listCoordCaptionY.add(y - (caption.length * 7));
-                    return y - (caption.length * 7);
+                    this.listCoordCaptionY.add(y - (maxLenght * 7));
+                    return y - (maxLenght * 7);
                 }
-
-
-
-
-
-
-
-
 
                 for(int i = 0; i < listCoordY.size(); i++)
                 {
@@ -301,8 +283,8 @@ public class Visual
                         }
                         else if((listCoordY.get(i) < (y - (maxLenght*7))))
                         {
-                            this.listCoordCaptionY.add(y - (caption.length*7));
-                            return y - (caption.length*7);
+                            this.listCoordCaptionY.add(y - (maxLenght*7));
+                            return y - (maxLenght*7);
                         }
                     }
                     else
@@ -316,10 +298,35 @@ public class Visual
                 return y + 20;
             }
 
-        /*    private int getCoordsInRadius(String[] caption, int x, int y)
+            private int GetMaxLenght(String[] caption)
             {
+                int maxLenght = caption[0].length();
 
-            }*/
+                for (int i = 1; i < caption.length; i++)
+                {
+                    if(caption[i].length() > maxLenght)
+                    {
+                        maxLenght = caption[i].length();
+                    }
+                }
+
+                return maxLenght;
+            }
+
+            private int GetRadius(String[] caption, int maxLenght)
+            {
+                int radius = 0;
+                if (maxLenght > caption.length)
+                {
+                    radius = maxLenght * 8;
+                }
+                else
+                {
+                    radius = caption.length * 8;
+                }
+
+                return radius;
+            }
         };
 
         jf.setSize(this.width, this.height);
