@@ -41,7 +41,7 @@ public class Visual
                         this.maxLenght = GetMaxLenght(caption);
                         this.radius = GetRadius(caption, maxLenght);
                         int x = this.getCoordX(maxLenght, radius, (int)coordList.get(k)[2 * l], (int)coordList.get(k)[2 * l + 1]);
-                        int y = this.getCoordY(maxLenght, radius, (int)coordList.get(k)[2 * l], (int)coordList.get(k)[2 * l + 1]);
+                        int y = this.getCoordY(caption.length, radius, (int)coordList.get(k)[2 * l], (int)coordList.get(k)[2 * l + 1]);
                         for (int m = 0; m < caption.length; m++)
                         {
                             //g.drawString(caption[m], (int) rArray.get(k)[2 * l] + 10, y);
@@ -82,51 +82,33 @@ public class Visual
                             listCoordY.add((int)coordList.get(i)[2 * j + 1]);
                         }
 
-                        if (x < coordList.get(i)[2 * j])
+                        if (x < (int)coordList.get(i)[2 * j])
                         {
                             isLeft = false;
                         }
 
-                        if (x > coordList.get(i)[2 * j])
+                        if (x > (int)coordList.get(i)[2 * j])
                         {
                             isRight = false;
                         }
                     }
                 }
 
-             /*   for (int i = 0; i < listCoordCaptionX.size(); i++)
+                for (int i = 0; i < listCoordCaptionX.size(); i++)
                 {
                     double e = Math.abs(listCoordCaptionX.get(i) - x);
                     if (e <= radius)
                     {
                         listCoordX.add(this.listCoordCaptionX.get(i));
                     }
-                }*/
+                }
 
-          /*      boolean isLeft = true;
-                for(int i = 0; i < listCoordX.size(); i++)
-                {
-                   if (x < listCoordX.get(i))
-                   {
-                       isLeft = false;
-                       break;
-                   }
-                }*/
                 if (isLeft)
                 {
                     this.listCoordCaptionX.add(x + 10);
                     return x + 10;
                 }
 
-              //  boolean isRight = true;
-             /*   for(int i = 0; i < listCoordX.size(); i++)
-                {
-                    if (x > listCoordX.get(i))
-                    {
-                        isRight = false;
-                        break;
-                    }
-                }*/
                 if (isRight)
                 {
                     this.listCoordCaptionX.add(x - (maxLenght * 7));
@@ -163,25 +145,6 @@ public class Visual
                     }
                 }
 
-            /*    for(int i = 0; i < listCoordX.size() - 1; i++)
-                {
-                        int distance = Math.abs(listCoordX.get(i) - listCoordX.get(i + 1));
-                        if (distance > (maxLenght * 7))
-                        {
-                            int rangeX = (distance - (maxLenght * 7)) / 2;
-                            int leftCoord = 0;
-                            if (listCoordX.get(i) < listCoordX.get(i + 1))
-                            {
-                                leftCoord = listCoordX.get(i);
-                            }
-                            else
-                            {
-                                leftCoord = listCoordX.get(i + 1);
-                            }
-
-                            return leftCoord + rangeX + 10;
-                        }
-                }*/
                 this.listCoordCaptionX.add(x - ((maxLenght*7) / 2));
                 return x - ((maxLenght*7) / 2);
             }
@@ -211,15 +174,15 @@ public class Visual
                             listCoordY.add((int)coordList.get(i)[2 * j + 1]);
                         }
 
-                        if (y < coordList.get(i)[2 * j + 1])
+                        if (y < (int)coordList.get(i)[2 * j + 1])
                         {
                             isTop = false;
 
                         }
 
-                        if (y > coordList.get(i)[2 * j + 1])
+                        if (y > (int)coordList.get(i)[2 * j + 1])
                         {
-                            isTop = false;
+                            isBottom = false;
 
                         }
                     }
@@ -242,30 +205,12 @@ public class Visual
                // listCoordY.addAll(this.listCoordCaptionY);
 
 
-               /* boolean isTop = true;
-                for(int i = 0; i < listCoordY.size(); i++)
-                {
-                    if (y < listCoordY.get(i))
-                    {
-                        isTop = false;
-                        break;
-                    }
-                }*/
                 if (isTop)
                 {
                     this.listCoordCaptionY.add(y + 20);
                     return y + 20;
                 }
 
-             /*   boolean isBottom = true;
-                for(int i = 0; i < listCoordY.size(); i++)
-                {
-                    if (y > listCoordY.get(i))
-                    {
-                        isBottom = false;
-                        break;
-                    }
-                }*/
                 if (isBottom)
                 {
                     this.listCoordCaptionY.add(y - (maxLenght * 7));
