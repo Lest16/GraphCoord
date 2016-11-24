@@ -1,5 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public class Visual
@@ -18,52 +21,107 @@ public class Visual
         JFrame jf = new JFrame("Graph"){
             public int radius;
             public int maxLenght;
-            public ArrayList<Integer> listCoordCaptionX = new ArrayList<Integer>();
-            public ArrayList<Integer> listCoordCaptionY = new ArrayList<Integer>();
 
             public void paint(Graphics g) {
                 super.paint(g);
                 g.setColor(Color.BLACK);
-                for(int k = 0; k < coordList.size(); k++) {
-                    for (int i = 0; i < adjacencyMatrixList.get(k).length; ++i)
-                        for (int j = i + 1; j < adjacencyMatrixList.get(k).length; ++j)
-                            if (adjacencyMatrixList.get(k)[i][j] == 1)
-                                g.drawLine((int) coordList.get(k)[2 * i], (int) coordList.get(k)[2 * i + 1], (int) coordList.get(k)[2 * j],
-                                        (int) coordList.get(k)[2 * j + 1]);
 
-                    for (int l = 0; l < adjacencyMatrixList.get(k).length; ++l) {
-                        g.drawOval((int) coordList.get(k)[2 * l], (int) coordList.get(k)[2 * l + 1],
-                                allVertices.get(k).get(l).size, allVertices.get(k).get(l).size);
-                        g.fillOval((int) coordList.get(k)[2 * l], (int) coordList.get(k)[2 * l + 1],
-                                allVertices.get(k).get(l).size, allVertices.get(k).get(l).size);
-                        String[] caption = allVertices.get(k).get(l).caption.split(" ");
-                        //int y = (int) rArray.get(k)[2 * l + 1] + 10;
-                        this.maxLenght = GetMaxLenght(caption);
-                        this.radius = GetRadius(caption, maxLenght);
-                        int x = this.getCoordX(maxLenght, radius, (int)coordList.get(k)[2 * l], (int)coordList.get(k)[2 * l + 1]);
-                        int y = this.getCoordY(caption.length, radius, (int)coordList.get(k)[2 * l], (int)coordList.get(k)[2 * l + 1]);
-                        for (int m = 0; m < caption.length; m++)
-                        {
-                            //g.drawString(caption[m], (int) rArray.get(k)[2 * l] + 10, y);
-                            g.drawString(caption[m], x, y);
-                            y += 10;
-                        }
+                File file = new File("output.html");
+                try {
+                    if(!file.exists()){
+                        file.createNewFile();
                     }
-                }
+                    PrintWriter out = new PrintWriter(file.getAbsoluteFile());
+                    try {
+                        out.print("<html>\n" +
+                                "\n" +
+                                "<svg viewBox=\"0 0 1100 950\" width=\"1100\" height=\"950\" preserveAspectRatio=\"xMidYMid meet\"  " +
+                                "xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n");
 
-                int startPos = 10;
-                for (int l = 0; l < sizeDotList.size(); ++l) {
-                    Integer size = sizeDotList.get(l);
-                    g.drawOval(startPos, 35, size, size);
-                    g.fillOval(startPos, 35, size, size);
-                    startPos += distance;
+
+
+
+
+                        for(int k = 0; k < coordList.size(); k++) {
+                            for (int i = 0; i < adjacencyMatrixList.get(k).length; ++i)
+                                for (int j = i + 1; j < adjacencyMatrixList.get(k).length; ++j)
+                                    if (adjacencyMatrixList.get(k)[i][j] == 1) {
+                                        out.print("\t<line x1=\""+ (int) coordList.get(k)[2 * i] + "\" y1=\"" + (int) coordList.get(k)[2 * i + 1] +
+                                                "\" x2=\"" + (int) coordList.get(k)[2 * j] + "\" y2=\"" + (int) coordList.get(k)[2 * j + 1] +
+                                                "\" stroke-width=\"2\" stroke=\"rgb(0,0,0)\"/>  \n" +
+                                                "   \n");
+                                        g.drawLine((int) coordList.get(k)[2 * i], (int) coordList.get(k)[2 * i + 1], (int) coordList.get(k)[2 * j],
+                                                (int) coordList.get(k)[2 * j + 1]);
+                                    }
+
+                            for (int l = 0; l < adjacencyMatrixList.get(k).length; ++l) {
+                                out.print("<circle cx=\"" + (int) coordList.get(k)[2 * l] + "\" cy=\"" + (int) coordList.get(k)[2 * l + 1] + "\"  " +
+                                        "r=\"" + allVertices.get(k).get(l).size  + "\" style=\"fill:black; fill-opacity:0.4; stroke-width:4px;\" />");
+                                g.drawOval((int) coordList.get(k)[2 * l], (int) coordList.get(k)[2 * l + 1],
+                                        allVertices.get(k).get(l).size, allVertices.get(k).get(l).size);
+                                g.fillOval((int) coordList.get(k)[2 * l], (int) coordList.get(k)[2 * l + 1],
+                                        allVertices.get(k).get(l).size, allVertices.get(k).get(l).size);
+                                String[] caption = allVertices.get(k).get(l).caption.split(" ");
+                                this.maxLenght = GetMaxLenght(caption);
+                                this.radius = GetRadius(caption, maxLenght);
+                                int x = this.getCoordX(maxLenght, radius, (int)coordList.get(k)[2 * l], (int)coordList.get(k)[2 * l + 1], l);
+                                int y = this.getCoordY(caption.length, radius, (int)coordList.get(k)[2 * l], (int)coordList.get(k)[2 * l + 1], l);
+                                for (int m = 0; m < caption.length; m++)
+                                {
+                                    out.print("<text  x=\"" + x + "\" y=\"" + y + "\" font-size=\"13px\"> " + caption[m] + " </text>");
+
+                                    g.drawString(caption[m], x, y);
+                                    y += 10;
+                                }
+                            }
+                        }
+
+                        int startPos = 10;
+                        for (int l = 0; l < sizeDotList.size(); ++l) {
+                            Integer size = sizeDotList.get(l);
+                            g.drawOval(startPos, 35, size, size);
+                            g.fillOval(startPos, 35, size, size);
+                            startPos += distance;
+                        }
+                    out.print("\n" +
+                            "</svg>\n" +
+                            "\n" +
+                            "</html>");
+                    } finally {
+                        out.close();
+                    }
+                } catch(IOException e) {
+                    throw new RuntimeException(e);
                 }
             }
 
 
 
-            private int getCoordX(int maxLenght, int radius, int x, int y)
+            private int getCoordX(int maxLenght, int radius, int x, int y, int idxCurrentVertex)
             {
+                int centralVertex = 0;
+                for(int k = 0; k < coordList.size(); k++) {
+                    int count = 0;
+                    for (int j = 0; j < adjacencyMatrixList.get(k).length; ++j)
+                        if (adjacencyMatrixList.get(k)[idxCurrentVertex][j] == 1)
+                        {
+                            centralVertex = j;
+                            count ++;
+                        }
+
+                    if(count == 1)
+                    {
+                        if(x > coordList.get(k)[2 * centralVertex])
+                        {
+                            return x + 10;
+                        }
+                        else
+                        {
+                            return x - (maxLenght * 7);
+                        }
+                    }
+                }
+
                 ArrayList<Integer> listCoordX = new ArrayList<Integer>();
                 ArrayList<Integer> listCoordY = new ArrayList<Integer>();
                 boolean isLeft = true;
@@ -94,28 +152,15 @@ public class Visual
                     }
                 }
 
-                for (int i = 0; i < listCoordCaptionX.size(); i++)
-                {
-                    double e = Math.abs(listCoordCaptionX.get(i) - x);
-                    if (e <= radius)
-                    {
-                        listCoordX.add(this.listCoordCaptionX.get(i));
-                    }
-                }
-
                 if (isLeft)
                 {
-                    this.listCoordCaptionX.add(x + 10);
                     return x + 10;
                 }
 
                 if (isRight)
                 {
-                    this.listCoordCaptionX.add(x - (maxLenght * 7));
                     return x - (maxLenght * 7);
                 }
-
-
 
                 for(int i = 0; i < listCoordX.size(); i++)
                 {
@@ -137,7 +182,6 @@ public class Visual
                                     leftCoord = listCoordX.get(j);
                                 }
 
-                                this.listCoordCaptionX.add(leftCoord + rangeX);
                                 return leftCoord + rangeX;
 
                             }
@@ -145,17 +189,35 @@ public class Visual
                     }
                 }
 
-                this.listCoordCaptionX.add(x - ((maxLenght*7) / 2));
                 return x - ((maxLenght*7) / 2);
             }
 
-
-
-
-
-
-            private int getCoordY(int maxLenght, int radius,  int x, int y)
+            private int getCoordY(int maxLenght, int radius,  int x, int y, int idxCurrentVertex)
             {
+                int count = 0;
+                int centralVertex = 0;
+                for(int k = 0; k < coordList.size(); k++) {
+
+                        for (int j = 0; j < adjacencyMatrixList.get(k).length; ++j)
+                            if (adjacencyMatrixList.get(k)[idxCurrentVertex][j] == 1)
+                            {
+                                centralVertex = j;
+                                count ++;
+                            }
+
+                    if(count == 1)
+                    {
+                        if(y > coordList.get(k)[2 * centralVertex + 1])
+                        {
+                            return y + 15;
+                        }
+                        else
+                        {
+                            return y - (maxLenght * 7);
+                        }
+                    }
+                }
+
                 ArrayList<Integer> listCoordX = new ArrayList<Integer>();
                 ArrayList<Integer> listCoordY = new ArrayList<Integer>();
                 boolean isTop = true;
@@ -177,43 +239,22 @@ public class Visual
                         if (y < (int)coordList.get(i)[2 * j + 1])
                         {
                             isTop = false;
-
                         }
 
                         if (y > (int)coordList.get(i)[2 * j + 1])
                         {
                             isBottom = false;
-
                         }
                     }
                 }
-      /*          for (int i = 0; i < listCoordCaptionX.size(); i++)
-                {
-                    if (Math.abs(listCoordCaptionX.get(i) - x) <= radius)
-                    {
-                        listCoordX.add(this.listCoordCaptionX.get(i));
-                    }
-                }
-
-                for (int i = 0; i < listCoordCaptionY.size(); i++)
-                {
-                    if (Math.abs(listCoordCaptionY.get(i) - y) <= radius)
-                    {
-                        listCoordY.add(this.listCoordCaptionY.get(i));
-                    }
-                }*/
-               // listCoordY.addAll(this.listCoordCaptionY);
-
 
                 if (isTop)
                 {
-                    this.listCoordCaptionY.add(y + 20);
                     return y + 20;
                 }
 
                 if (isBottom)
                 {
-                    this.listCoordCaptionY.add(y - (maxLenght * 7));
                     return y - (maxLenght * 7);
                 }
 
@@ -223,30 +264,25 @@ public class Visual
                     {
                         if(listCoordY.get(i) > (y + (maxLenght*7)))
                         {
-                            this.listCoordCaptionY.add(y + 20);
                             return y + 20;
                         }
                         else if((listCoordY.get(i) < (y - (maxLenght*7))))
                         {
-                            this.listCoordCaptionY.add(y - (maxLenght*7));
                             return y - (maxLenght*7);
                         }
                     }
                     else
                     {
-                        this.listCoordCaptionY.add(y + 20);
                         return y + 20;
                     }
                 }
 
-                this.listCoordCaptionY.add(y + 20);
                 return y + 20;
             }
 
             private int GetMaxLenght(String[] caption)
             {
                 int maxLenght = caption[0].length();
-
                 for (int i = 1; i < caption.length; i++)
                 {
                     if(caption[i].length() > maxLenght)

@@ -32,8 +32,8 @@ public class Main
         ArrayList<double[]> coordList = new ArrayList<double[]>();
         ArrayList<int[][]> adjacencyMatrixList = new ArrayList<int[][]>();
         for (int l = 0; l < mainMatr.length; ++l) {
-            //params.meanSpringLength = ((params.height + params.width - indent)) / (graphList.get(l).length * graphList.size());
-            params.meanSpringLength = 30;
+            //params.meanSpringLength = ((params.height + params.width - indent)) / ((graphList.get(l).length-2) * graphList.size());
+            params.meanSpringLength = 35;
                     coordList.add(graph.getCoord(graphList.get(l), params, 0, 0, (int)coordVertexMainGraph[2 * l],
                     (int)coordVertexMainGraph[2 * l + 1]));
             adjacencyMatrixList.add(graphList.get(l));
