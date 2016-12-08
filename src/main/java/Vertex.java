@@ -18,7 +18,7 @@ public class Vertex
     private String getRandomWord()
     {
         String dict = "abcdefghijklmnopqrstuvwxyz1234567890";
-        int topBound = 2 + (int)(Math.random() * 5);
+        int topBound = 3 + (int)(Math.random() * 4);
         int countWordBound = 1 + (int)(Math.random() * 4);
         String randomWord = "";
         for(int j = 0; j < countWordBound; j++)

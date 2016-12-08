@@ -37,11 +37,6 @@ public class Visual
                                 "\n" +
                                 "<svg viewBox=\"0 0 1100 950\" width=\"1100\" height=\"950\" preserveAspectRatio=\"xMidYMid meet\"  " +
                                 "xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n");
-
-
-
-
-
                         for(int k = 0; k < coordList.size(); k++) {
                             for (int i = 0; i < adjacencyMatrixList.get(k).length; ++i)
                                 for (int j = i + 1; j < adjacencyMatrixList.get(k).length; ++j)
@@ -117,7 +112,7 @@ public class Visual
                         }
                         else
                         {
-                            return x - (maxLenght * 7);
+                            return x - (maxLenght * 9);
                         }
                     }
                 }
@@ -159,7 +154,7 @@ public class Visual
 
                 if (isRight)
                 {
-                    return x - (maxLenght * 7);
+                    return x - (maxLenght * 9);
                 }
 
                 for(int i = 0; i < listCoordX.size(); i++)
@@ -169,9 +164,9 @@ public class Visual
                         if (((listCoordX.get(i) < x) && (listCoordX.get(j) > x)) || ((listCoordX.get(i) > x) && (listCoordX.get(j) < x)))
                         {
                             int distance = Math.abs(listCoordX.get(i) - listCoordX.get(j));
-                            if (distance > (maxLenght * 7))
+                            if (distance > (maxLenght * 9))
                             {
-                                int rangeX = (distance - (maxLenght * 7)) / 2;
+                                int rangeX = (distance - (maxLenght * 9)) / 2;
                                 int leftCoord = 0;
                                 if (listCoordX.get(i) < listCoordX.get(j))
                                 {
@@ -189,7 +184,7 @@ public class Visual
                     }
                 }
 
-                return x - ((maxLenght*7) / 2);
+                return x - ((maxLenght*9) / 2);
             }
 
             private int getCoordY(int maxLenght, int radius,  int x, int y, int idxCurrentVertex)
