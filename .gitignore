@@ -8,3 +8,4 @@ atlassian-ide-plugin.xml
 com_crashlytics_export_strings.xml
 result.txt
 log_file.log
+output.html

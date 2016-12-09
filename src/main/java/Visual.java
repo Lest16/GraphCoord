@@ -16,7 +16,8 @@ public class Visual
         this.height = height;
     }
 
-    public void Draw(final ArrayList<double[]> coordList, final ArrayList<int[][]> adjacencyMatrixList, final ArrayList<Integer> sizeDotList, final int distance, final ArrayList<ArrayList<Vertex>> allVertices)
+    public void Draw(final ArrayList<double[]> coordList, final ArrayList<int[][]> adjacencyMatrixList,
+                     final ArrayList<Integer> sizeDotList, final int distance, final ArrayList<ArrayList<Vertex>> allVertices)
     {
         JFrame jf = new JFrame("Graph"){
             public int radius;

@@ -6,7 +6,8 @@ public class Main
     {
         Graph graph = new Graph();
         Params params = new Params();
-        ArrayList<int[][]> graphList = graph.readGraphs();
+        LinearGraph linearGraph = new LinearGraph(params.width, params.height);
+     /*   ArrayList<int[][]> graphList = graph.readGraphs();
         ArrayList<int []> sizesVertex = graph.getSizesVertex();
         ArrayList<ArrayList<Vertex>> allVertices = new ArrayList<ArrayList<Vertex>>();
         for(int i = 0; i < sizesVertex.size(); i++)
@@ -28,7 +29,8 @@ public class Main
             indent = 70;
         }
         params.meanSpringLength = ((params.height + params.width - indent) / 2) / 2;
-        double[] coordVertexMainGraph = graph.getCoord(mainMatr, params, params.width / 2, (params.height + indent) / 2, 0, 0);
+        double[] coordVertexMainGraph = graph.getCoord(mainMatr, params, params.width / 2,
+                (params.height + indent) / 2, 0, 0);
         ArrayList<double[]> coordList = new ArrayList<double[]>();
         ArrayList<int[][]> adjacencyMatrixList = new ArrayList<int[][]>();
         for (int l = 0; l < mainMatr.length; ++l) {
@@ -46,6 +48,6 @@ public class Main
             distance = params.width / sizeDotList.size();
         }
 
-        visual.Draw(coordList, adjacencyMatrixList, sizeDotList, distance, allVertices);
+        visual.Draw(coordList, adjacencyMatrixList, sizeDotList, distance, allVertices);*/
     }
 }
