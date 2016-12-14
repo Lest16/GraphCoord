@@ -60,6 +60,21 @@ public class Graph
         return sizeDotList;
     }
 
+    public boolean IsFullGraph(int[][] graph) throws Exception {
+        for (int i = 0; i < graph.length; i++)
+        {
+            for (int j = 0; j < graph.length; j++)
+            {
+                if ((i != j) && (graph[i][j] != 1))
+                {
+                    return false;
+                }
+
+            }
+        }
+        return true;
+    }
+
     public int[][] createMatrix(int countVertex)
     {
         int[][] resultMatrix = new int[countVertex][countVertex];

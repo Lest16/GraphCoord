@@ -6,8 +6,18 @@ public class Main
     {
         Graph graph = new Graph();
         Params params = new Params();
-        LinearGraph linearGraph = new LinearGraph(params.width, params.height);
-     /*   ArrayList<int[][]> graphList = graph.readGraphs();
+        //LinearGraph linearGraph = new LinearGraph(params.width, params.height);
+        ArrayList<int[][]> graphList = graph.readGraphs();
+       /* for(int i = 0; i < graphList.size(); i++)
+        {
+            if(graph.IsFullGraph(graphList.get(i)))
+            {
+                LinearGraph linearGraph = new LinearGraph(params.width, params.height, graphList.get(i));
+                linearGraph.Draw();
+                graphList.remove(i);
+                break;
+            }
+        }*/
         ArrayList<int []> sizesVertex = graph.getSizesVertex();
         ArrayList<ArrayList<Vertex>> allVertices = new ArrayList<ArrayList<Vertex>>();
         for(int i = 0; i < sizesVertex.size(); i++)
@@ -34,20 +44,25 @@ public class Main
         ArrayList<double[]> coordList = new ArrayList<double[]>();
         ArrayList<int[][]> adjacencyMatrixList = new ArrayList<int[][]>();
         for (int l = 0; l < mainMatr.length; ++l) {
-            params.meanSpringLength = ((params.height + params.width - indent)) / (graphList.get(l).length * graphList.size());
-            //params.meanSpringLength = 50;
+           /* if(graph.IsFullGraph(graphList.get(l)))
+            {
+                LinearGraph linearGraph = new LinearGraph(params.width, params.height, graphList.get(l));
+                linearGraph.Draw();
+            }*/
+            //params.meanSpringLength = ((params.height + params.width - indent)) / (graphList.get(l).length * graphList.size());
+            params.meanSpringLength = 15;
                     coordList.add(graph.getCoord(graphList.get(l), params, 0, 0, (int)coordVertexMainGraph[2 * l],
                     (int)coordVertexMainGraph[2 * l + 1]));
             adjacencyMatrixList.add(graphList.get(l));
         }
 
-        Visual visual = new Visual(params.width, params.height);
+        Visual visual = new Visual(params.width, params.height, adjacencyMatrixList, coordList);
         int distance = 0;
         if (sizeDotList.size() != 0)
         {
             distance = params.width / sizeDotList.size();
         }
 
-        visual.Draw(coordList, adjacencyMatrixList, sizeDotList, distance, allVertices);*/
+        visual.Draw(sizeDotList, distance, allVertices);
     }
 }

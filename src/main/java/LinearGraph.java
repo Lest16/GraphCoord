@@ -12,7 +12,12 @@ public class LinearGraph {
         this.width = width;
         this.height = height;
         this.readGraphs();
-        this.Draw();
+    }
+
+    public LinearGraph(int width, int height, int[][] graph) throws Exception {
+        this.width = width;
+        this.height = height;
+        this.linearMatrix = graph;
     }
     public void readGraphs() throws Exception
     {
@@ -62,7 +67,7 @@ public class LinearGraph {
                         if(i % 2 == 0)
                         {
                             out.print("\t<line x1=\""+ (lastCoordX + distance) + "\" y1=\"" + (int) this.height / 2 +
-                                    "\" x2=\"" + (lastCoordX + distance) + "\" y2=\"" + (int) ((this.height / 2) + distance) +
+                                    "\" x2=\"" + (lastCoordX + distance) + "\" y2=\"" + (int) (((this.height / 2) + distance) - vertex.size) +
                                     "\" stroke-width=\"2\" stroke=\"rgb(0,0,0)\"/>  \n" +
                                     "   \n");
                             out.print("<circle cx=\"" + (int) (lastCoordX + distance) + "\" cy=\"" + ((this.height / 2) + distance) + "\"  " +
@@ -78,7 +83,7 @@ public class LinearGraph {
                         else
                         {
                             out.print("\t<line x1=\""+ (lastCoordX + distance) + "\" y1=\"" + (int) this.height / 2 +
-                                    "\" x2=\"" + (lastCoordX + distance) + "\" y2=\"" + (int) ((this.height / 2) - distance) +
+                                    "\" x2=\"" + (lastCoordX + distance) + "\" y2=\"" + (int) (((this.height / 2) - distance) + vertex.size) +
                                     "\" stroke-width=\"2\" stroke=\"rgb(0,0,0)\"/>  \n" +
                                     "   \n");
                             out.print("<circle cx=\"" + (int) (lastCoordX + distance) + "\" cy=\"" + ((this.height / 2) - distance) + "\"  " +

@@ -9,23 +9,20 @@ public class Visual
 {
     private final int width;
     private final int height;
+    private ArrayList<int[][]> adjacencyMatrixList;
+    private ArrayList<double[]> coordList;
+    public int radius;
+    public int maxLenght;
 
-    public Visual(int width, int height)
+    public Visual(int width, int height, ArrayList<int[][]> adjacencyMatrixList, ArrayList<double[]> coordList)
     {
         this.width = width;
         this.height = height;
+        this.adjacencyMatrixList = adjacencyMatrixList;
+        this.coordList = coordList;
     }
 
-    public void Draw(final ArrayList<double[]> coordList, final ArrayList<int[][]> adjacencyMatrixList,
-                     final ArrayList<Integer> sizeDotList, final int distance, final ArrayList<ArrayList<Vertex>> allVertices)
-    {
-        JFrame jf = new JFrame("Graph"){
-            public int radius;
-            public int maxLenght;
-
-            public void paint(Graphics g) {
-                super.paint(g);
-                g.setColor(Color.BLACK);
+    public void Draw(final ArrayList<Integer> sizeDotList, final int distance, final ArrayList<ArrayList<Vertex>> allVertices) throws Exception {
 
                 File file = new File("output.html");
                 try {
@@ -34,51 +31,100 @@ public class Visual
                     }
                     PrintWriter out = new PrintWriter(file.getAbsoluteFile());
                     try {
+                        Graph graph = new Graph();
                         out.print("<html>\n" +
                                 "\n" +
                                 "<svg viewBox=\"0 0 1100 950\" width=\"1100\" height=\"950\" preserveAspectRatio=\"xMidYMid meet\"  " +
                                 "xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n");
                         for(int k = 0; k < coordList.size(); k++) {
-                            for (int i = 0; i < adjacencyMatrixList.get(k).length; ++i)
-                                for (int j = i + 1; j < adjacencyMatrixList.get(k).length; ++j)
-                                    if (adjacencyMatrixList.get(k)[i][j] == 1) {
-                                        out.print("\t<line x1=\""+ (int) coordList.get(k)[2 * i] + "\" y1=\"" + (int) coordList.get(k)[2 * i + 1] +
-                                                "\" x2=\"" + (int) coordList.get(k)[2 * j] + "\" y2=\"" + (int) coordList.get(k)[2 * j + 1] +
+
+
+                            if (graph.IsFullGraph(adjacencyMatrixList.get(k)))
+                            {
+                                int indent = (this.width / coordList.size()) / coordList.get(k).length;
+                                int lastCoordX = (int) coordList.get(k)[0];
+                                for (int i = 0; i < adjacencyMatrixList.get(k).length - 1; ++i) {
+                                    Vertex vertex = new Vertex(9);
+                                    if (i % 2 == 0) {
+                                        out.print("\t<line x1=\"" + (lastCoordX + indent) + "\" y1=\"" + (int) coordList.get(k)[0] +
+                                                "\" x2=\"" + (lastCoordX + indent) + "\" y2=\"" + (int) ((coordList.get(k)[1] + indent) - vertex.size) +
                                                 "\" stroke-width=\"2\" stroke=\"rgb(0,0,0)\"/>  \n" +
                                                 "   \n");
-                                        g.drawLine((int) coordList.get(k)[2 * i], (int) coordList.get(k)[2 * i + 1], (int) coordList.get(k)[2 * j],
-                                                (int) coordList.get(k)[2 * j + 1]);
+                                        out.print("<circle cx=\"" + (int) (lastCoordX + indent) + "\" cy=\"" + ((this.height / 2) + indent) + "\"  " +
+                                                "r=\"" + vertex.size + "\" style=\"fill:black; fill-opacity:0.4; stroke-width:4px;\" />");
+                                        int y = ((this.height / 2) + indent);
+                                        String[] caption = vertex.caption.split(" ");
+                                        for (int m = 0; m < caption.length; m++) {
+                                            out.print("<text  x=\"" + ((lastCoordX + indent) + 10) + "\" y=\"" + y + "\" font-size=\"13px\"> " + caption[m] + " </text>");
+                                            y += 10;
+                                        }
+                                    } else {
+                                        out.print("\t<line x1=\"" + (lastCoordX + indent) + "\" y1=\"" + (int) coordList.get(k)[0] +
+                                                "\" x2=\"" + (lastCoordX + indent) + "\" y2=\"" + (int) ((coordList.get(k)[1] - indent) + vertex.size) +
+                                                "\" stroke-width=\"2\" stroke=\"rgb(0,0,0)\"/>  \n" +
+                                                "   \n");
+                                        out.print("<circle cx=\"" + (int) (lastCoordX + indent) + "\" cy=\"" + ((this.height / 2) - indent) + "\"  " +
+                                                "r=\"" + vertex.size + "\" style=\"fill:black; fill-opacity:0.4; stroke-width:4px;\" />");
+                                        int y = ((this.height / 2) - indent);
+                                        String[] caption = vertex.caption.split(" ");
+                                        for (int m = 0; m < caption.length; m++) {
+                                            out.print("<text  x=\"" + ((lastCoordX + indent) + 10) + "\" y=\"" + y + "\" font-size=\"13px\"> " + caption[m] + " </text>");
+                                            y += 10;
+                                        }
                                     }
+                                    lastCoordX += indent;
 
-                            for (int l = 0; l < adjacencyMatrixList.get(k).length; ++l) {
-                                out.print("<circle cx=\"" + (int) coordList.get(k)[2 * l] + "\" cy=\"" + (int) coordList.get(k)[2 * l + 1] + "\"  " +
-                                        "r=\"" + allVertices.get(k).get(l).size  + "\" style=\"fill:black; fill-opacity:0.4; stroke-width:4px;\" />");
-                                g.drawOval((int) coordList.get(k)[2 * l], (int) coordList.get(k)[2 * l + 1],
-                                        allVertices.get(k).get(l).size, allVertices.get(k).get(l).size);
-                                g.fillOval((int) coordList.get(k)[2 * l], (int) coordList.get(k)[2 * l + 1],
-                                        allVertices.get(k).get(l).size, allVertices.get(k).get(l).size);
-                                String[] caption = allVertices.get(k).get(l).caption.split(" ");
-                                this.maxLenght = GetMaxLenght(caption);
-                                this.radius = GetRadius(caption, maxLenght);
-                                int x = this.getCoordX(maxLenght, radius, (int)coordList.get(k)[2 * l], (int)coordList.get(k)[2 * l + 1], l);
-                                int y = this.getCoordY(caption.length, radius, (int)coordList.get(k)[2 * l], (int)coordList.get(k)[2 * l + 1], l);
-                                for (int m = 0; m < caption.length; m++)
-                                {
-                                    out.print("<text  x=\"" + x + "\" y=\"" + y + "\" font-size=\"13px\"> " + caption[m] + " </text>");
-
-                                    g.drawString(caption[m], x, y);
-                                    y += 10;
                                 }
+                            } else {
+
+
+                                for (int i = 0; i < adjacencyMatrixList.get(k).length; ++i)
+                                    for (int j = i + 1; j < adjacencyMatrixList.get(k).length; ++j)
+                                        if (adjacencyMatrixList.get(k)[i][j] == 1) {
+                                            out.print("\t<line x1=\"" + (int) coordList.get(k)[2 * i] + "\" y1=\"" + (int) coordList.get(k)[2 * i + 1] +
+                                                    "\" x2=\"" + (int) coordList.get(k)[2 * j] + "\" y2=\"" + (int) coordList.get(k)[2 * j + 1] +
+                                                    "\" stroke-width=\"2\" stroke=\"rgb(0,0,0)\"/>  \n" +
+                                                    "   \n");
+                                        }
+
+                                for (int l = 0; l < adjacencyMatrixList.get(k).length; ++l) {
+                                    out.print("<circle cx=\"" + (int) coordList.get(k)[2 * l] + "\" cy=\"" + (int) coordList.get(k)[2 * l + 1] + "\"  " +
+                                            "r=\"" + allVertices.get(k).get(l).size + "\" style=\"fill:black; fill-opacity:0.4; stroke-width:4px;\" />");
+                                    String[] caption = allVertices.get(k).get(l).caption.split(" ");
+                                    this.maxLenght = GetMaxLenght(caption);
+                                    this.radius = GetRadius(caption, maxLenght);
+                                    int x = this.getCoordX(maxLenght, radius, (int) coordList.get(k)[2 * l], (int) coordList.get(k)[2 * l + 1], l);
+                                    int y = this.getCoordY(caption.length, radius, (int) coordList.get(k)[2 * l], (int) coordList.get(k)[2 * l + 1], l);
+                                    for (int m = 0; m < caption.length; m++) {
+                                        out.print("<text  x=\"" + x + "\" y=\"" + y + "\" font-size=\"13px\"> " + caption[m] + " </text>");
+
+                                        y += 10;
+                                    }
+                                }
+
+                           /* int startPos = 10;
+                            for (int l = 0; l < sizeDotList.size(); ++l) {
+                                Integer size = sizeDotList.get(l);
+                                g.drawOval(startPos, 35, size, size);
+                                g.fillOval(startPos, 35, size, size);
+                                startPos += distance;
+                            }*/
                             }
+
+
                         }
 
-                        int startPos = 10;
-                        for (int l = 0; l < sizeDotList.size(); ++l) {
-                            Integer size = sizeDotList.get(l);
-                            g.drawOval(startPos, 35, size, size);
-                            g.fillOval(startPos, 35, size, size);
-                            startPos += distance;
-                        }
+
+
+
+
+
+
+
+
+
+
+
                     out.print("\n" +
                             "</svg>\n" +
                             "\n" +
@@ -304,12 +350,9 @@ public class Visual
 
                 return radius;
             }
-        };
 
-        jf.setSize(this.width, this.height);
-        jf.setVisible(true);
 
     }
 
 
-}
+
