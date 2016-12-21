@@ -37,35 +37,39 @@ public class Visual
                                 "<svg viewBox=\"0 0 1100 950\" width=\"1100\" height=\"950\" preserveAspectRatio=\"xMidYMid meet\"  " +
                                 "xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n");
                         for(int k = 0; k < coordList.size(); k++) {
-
-
                             if (graph.IsFullGraph(adjacencyMatrixList.get(k)))
                             {
                                 int indent = (this.width / coordList.size()) / coordList.get(k).length;
-                                int lastCoordX = (int) coordList.get(k)[0];
+                                int lastCoordX = (int) coordList.get(k)[0] - indent * adjacencyMatrixList.get(k).length / 2;
+                                int rightX = lastCoordX + (indent * adjacencyMatrixList.get(k).length);
+                                out.print("\t<line x1=\""+ lastCoordX + "\" y1=\"" + (int) coordList.get(k)[1] +
+                                        "\" x2=\"" + rightX + "\" y2=\"" + (int) coordList.get(k)[1] +
+                                        "\" stroke-width=\"2\" stroke=\"rgb(0,0,0)\"/>  \n" +
+                                        "   \n");
+
                                 for (int i = 0; i < adjacencyMatrixList.get(k).length - 1; ++i) {
                                     Vertex vertex = new Vertex(9);
                                     if (i % 2 == 0) {
-                                        out.print("\t<line x1=\"" + (lastCoordX + indent) + "\" y1=\"" + (int) coordList.get(k)[0] +
+                                        out.print("\t<line x1=\"" + (lastCoordX + indent) + "\" y1=\"" + (int) coordList.get(k)[1] +
                                                 "\" x2=\"" + (lastCoordX + indent) + "\" y2=\"" + (int) ((coordList.get(k)[1] + indent) - vertex.size) +
                                                 "\" stroke-width=\"2\" stroke=\"rgb(0,0,0)\"/>  \n" +
                                                 "   \n");
-                                        out.print("<circle cx=\"" + (int) (lastCoordX + indent) + "\" cy=\"" + ((this.height / 2) + indent) + "\"  " +
+                                        out.print("<circle cx=\"" + (int) (lastCoordX + indent) + "\" cy=\"" + (coordList.get(k)[1] + indent) + "\"  " +
                                                 "r=\"" + vertex.size + "\" style=\"fill:black; fill-opacity:0.4; stroke-width:4px;\" />");
-                                        int y = ((this.height / 2) + indent);
+                                        int y = (int)(coordList.get(k)[1] + indent);
                                         String[] caption = vertex.caption.split(" ");
                                         for (int m = 0; m < caption.length; m++) {
                                             out.print("<text  x=\"" + ((lastCoordX + indent) + 10) + "\" y=\"" + y + "\" font-size=\"13px\"> " + caption[m] + " </text>");
                                             y += 10;
                                         }
                                     } else {
-                                        out.print("\t<line x1=\"" + (lastCoordX + indent) + "\" y1=\"" + (int) coordList.get(k)[0] +
+                                        out.print("\t<line x1=\"" + (lastCoordX + indent) + "\" y1=\"" + (int) coordList.get(k)[1] +
                                                 "\" x2=\"" + (lastCoordX + indent) + "\" y2=\"" + (int) ((coordList.get(k)[1] - indent) + vertex.size) +
                                                 "\" stroke-width=\"2\" stroke=\"rgb(0,0,0)\"/>  \n" +
                                                 "   \n");
-                                        out.print("<circle cx=\"" + (int) (lastCoordX + indent) + "\" cy=\"" + ((this.height / 2) - indent) + "\"  " +
+                                        out.print("<circle cx=\"" + (int) (lastCoordX + indent) + "\" cy=\"" + (coordList.get(k)[1] - indent) + "\"  " +
                                                 "r=\"" + vertex.size + "\" style=\"fill:black; fill-opacity:0.4; stroke-width:4px;\" />");
-                                        int y = ((this.height / 2) - indent);
+                                        int y = (int)(coordList.get(k)[1] - indent);
                                         String[] caption = vertex.caption.split(" ");
                                         for (int m = 0; m < caption.length; m++) {
                                             out.print("<text  x=\"" + ((lastCoordX + indent) + 10) + "\" y=\"" + y + "\" font-size=\"13px\"> " + caption[m] + " </text>");
@@ -113,16 +117,6 @@ public class Visual
 
 
                         }
-
-
-
-
-
-
-
-
-
-
 
 
                     out.print("\n" +
