@@ -11,16 +11,17 @@ public class Graph
         int[][] matrix;
         ArrayList<int[][]> graphList = new ArrayList<int[][]>();
         BufferedReader fin = new BufferedReader( new InputStreamReader(new FileInputStream("src/main/resources/data")));
-        List<String> fileContent = new ArrayList<String>() ;
-        String str ;
-        while( (str = fin.readLine() ) != null )
+        List<String> fileContent = new ArrayList<String>();
+        String str;
+        while((str = fin.readLine()) != null)
         {
             fileContent.add(str);
         }
 
         fin.close();
         int k = 0;
-        while ((k - 1) != fileContent.size()) {
+        while ((k - 1) != fileContent.size())
+        {
             String[] splitLineInit = fileContent.get(k).split(" ");
             matrix = new int[splitLineInit.length][splitLineInit.length];
             for (int i = k; i < splitLineInit.length + k; i++) {
@@ -36,16 +37,17 @@ public class Graph
         return graphList;
     }
 
-    public ArrayList<Integer> readDot() throws Exception {
+    public ArrayList<Integer> readDot() throws Exception
+    {
         BufferedReader fin = new BufferedReader( new InputStreamReader(new FileInputStream("src/main/resources/countDot")));
-        List<String> fileContent = new ArrayList<String>() ;
+        List<String> fileContent = new ArrayList<String>();
         String str;
-        while( (str = fin.readLine() ) != null )
+        while((str = fin.readLine()) != null)
         {
             fileContent.add(str);
         }
 
-        fin.close() ;
+        fin.close();
         if (fileContent.size() == 0)
         {
             return new ArrayList<Integer>();
@@ -60,7 +62,8 @@ public class Graph
         return sizeDotList;
     }
 
-    public boolean IsFullGraph(int[][] graph) throws Exception {
+    public boolean IsFullGraph(int[][] graph) throws Exception
+    {
         for (int i = 0; i < graph.length; i++)
         {
             for (int j = 0; j < graph.length; j++)
@@ -101,7 +104,7 @@ public class Graph
         BufferedReader fin = new BufferedReader( new InputStreamReader(new FileInputStream("src/main/resources/sizesVertex")));
         List<String> fileContent = new ArrayList<String>() ;
         String str;
-        while( (str = fin.readLine() ) != null )
+        while((str = fin.readLine() ) != null)
         {
             fileContent.add(str);
         }
@@ -123,7 +126,7 @@ public class Graph
         return listSizes;
     }
 
-    public double[] getCoord(int[][] matr,Params params, double centX, double centY, int deviationX, int deviationY)
+    public double[] getCoord(int[][] matr, Params params, double centX, double centY, int deviationX, int deviationY)
     {
         Models models = new Models(matr, params);
         PhysSys physSys = new PhysSys(models);

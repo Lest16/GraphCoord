@@ -39,7 +39,6 @@ public class LinearGraph {
                 this.linearMatrix[i][j] = Integer.parseInt(splitLine[j]);
             }
         }
-
     }
 
     public void Draw() throws Exception
