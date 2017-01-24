@@ -6,18 +6,18 @@ import java.util.List;
 
 public class Graph
 {
-    public ArrayList<int[][]> readGraphs() throws Exception
+    public ArrayList<int[][]> readGraphs(String filename) throws Exception
     {
         int[][] matrix;
         ArrayList<int[][]> graphList = new ArrayList<int[][]>();
-        BufferedReader fin = new BufferedReader( new InputStreamReader(new FileInputStream("src/main/resources/data")));
+        BufferedReader fin = new BufferedReader( new InputStreamReader(new FileInputStream("src/main/resources/data/Graphs/" + filename)));
         List<String> fileContent = new ArrayList<String>();
         String str;
         while((str = fin.readLine()) != null)
         {
             fileContent.add(str);
         }
-
+        //fileContent.remove(fileContent.size() - 1);
         fin.close();
         int k = 0;
         while ((k - 1) != fileContent.size())

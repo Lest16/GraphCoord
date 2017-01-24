@@ -1,4 +1,4 @@
-﻿.idea/
+.idea/
 *.ipr
 *.iws
 *.iml
@@ -9,3 +9,6 @@ com_crashlytics_export_strings.xml
 result.txt
 log_file.log
 output.html
+src/main/resources/data/
+target/classes/data/
+outputSVG/

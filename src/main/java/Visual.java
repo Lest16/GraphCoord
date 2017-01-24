@@ -20,9 +20,9 @@ public class Visual
         this.coordList = coordList;
     }
 
-    public void Draw(final ArrayList<Integer> sizeDotList, final int distance, final ArrayList<ArrayList<Vertex>> allVertices) throws Exception {
+    public void Draw(final ArrayList<Integer> sizeDotList, final int distance, final ArrayList<ArrayList<Vertex>> allVertices, String filename) throws Exception {
 
-                File file = new File("output.html");
+                File file = new File("outputSVG/" + filename + ".html");
                 try {
                     if(!file.exists()){
                         file.createNewFile();
@@ -61,7 +61,8 @@ public class Visual
                                         String[] caption = vertex.caption.split(" ");
                                         for (int m = 0; m < caption.length; m++)
                                         {
-                                            out.print("<text  x=\"" + ((lastCoordX + indent) + 10) + "\" y=\"" + y + "\" font-size=\"13px\"> " + caption[m] + " </text> \n");
+                                            out.print("<text  x=\"" + ((lastCoordX + indent) + 10) + "\" y=\"" + y +
+                                                    "\" font-size=\"13px\"> " + caption[m] + " </text> \n");
                                             y += 10;
                                         }
                                     }
@@ -76,7 +77,8 @@ public class Visual
                                         String[] caption = vertex.caption.split(" ");
                                         for (int m = 0; m < caption.length; m++)
                                         {
-                                            out.print("<text  x=\"" + ((lastCoordX + indent) + 10) + "\" y=\"" + y + "\" font-size=\"13px\"> " + caption[m] + " </text> \n");
+                                            out.print("<text  x=\"" + ((lastCoordX + indent) + 10) + "\" y=\"" + y + "\" font-size=\"13px\"> " +
+                                                    caption[m] + " </text> \n");
                                             y += 10;
                                         }
                                     }
@@ -97,9 +99,10 @@ public class Visual
 
                                 for (int l = 0; l < adjacencyMatrixList.get(k).length; ++l)
                                 {
+                                    Vertex vertex = new Vertex(9);
                                     out.print("<circle cx=\"" + (int) coordList.get(k)[2 * l] + "\" cy=\"" + (int) coordList.get(k)[2 * l + 1] + "\"  " +
-                                            "r=\"" + allVertices.get(k).get(l).size + "\" style=\"fill:black; fill-opacity:0.4; stroke-width:4px;\" /> \n");
-                                    String[] caption = allVertices.get(k).get(l).caption.split(" ");
+                                            "r=\"" + 9 + "\" style=\"fill:black; fill-opacity:0.4; stroke-width:4px;\" /> \n");
+                                    String[] caption = vertex.caption.split(" ");
                                     this.maxLenght = GetMaxLenght(caption);
                                     this.radius = GetRadius(caption, maxLenght);
                                     int x = this.getCoordX(maxLenght, radius, (int) coordList.get(k)[2 * l], (int) coordList.get(k)[2 * l + 1], l);
