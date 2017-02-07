@@ -105,8 +105,8 @@ public class Visual
                                     String[] caption = vertex.caption.split(" ");
                                     this.maxLenght = GetMaxLenght(caption);
                                     this.radius = GetRadius(caption, maxLenght);
-                                    int x = this.getCoordX(maxLenght, radius, (int) coordList.get(k)[2 * l], (int) coordList.get(k)[2 * l + 1], l);
-                                    int y = this.getCoordY(caption.length, radius, (int) coordList.get(k)[2 * l], (int) coordList.get(k)[2 * l + 1], l);
+                                    int x = this.getCoordX(maxLenght, radius, (int) coordList.get(k)[2 * l], (int) coordList.get(k)[2 * l + 1], l, k);
+                                    int y = this.getCoordY(caption.length, radius, (int) coordList.get(k)[2 * l], (int) coordList.get(k)[2 * l + 1], l, k);
                                     for (int m = 0; m < caption.length; m++)
                                     {
                                         out.print("<text  x=\"" + x + "\" y=\"" + y + "\" font-size=\"13px\"> " + caption[m] + " </text> \n");
@@ -135,30 +135,29 @@ public class Visual
                 }
             }
 
-            private int getCoordX(int maxLenght, int radius, int x, int y, int idxCurrentVertex)
+            private int getCoordX(int maxLenght, int radius, int x, int y, int idxCurrentVertex, int idxCurrentMatrix)
             {
                 int centralVertex = 0;
-                for(int k = 0; k < coordList.size(); k++) {
-                    int count = 0;
-                    for (int j = 0; j < adjacencyMatrixList.get(k).length; ++j)
-                        if (adjacencyMatrixList.get(k)[idxCurrentVertex][j] == 1)
-                        {
-                            centralVertex = j;
-                            count ++;
-                        }
-
-                    if(count == 1)
+                int count = 0;
+                for (int j = 0; j < adjacencyMatrixList.get(idxCurrentMatrix).length; ++j)
+                    if (adjacencyMatrixList.get(idxCurrentMatrix)[idxCurrentVertex][j] == 1)
                     {
-                        if(x > coordList.get(k)[2 * centralVertex])
-                        {
-                            return x + 10;
-                        }
-                        else
-                        {
-                            return x - (maxLenght * 9);
-                        }
+                        centralVertex = j;
+                        count ++;
+                    }
+
+                if(count == 1)
+                {
+                    if(x > coordList.get(idxCurrentMatrix)[2 * centralVertex])
+                    {
+                        return x + 10;
+                    }
+                    else
+                    {
+                        return x - (maxLenght * 9);
                     }
                 }
+
 
                 ArrayList<Integer> listCoordX = new ArrayList<Integer>();
                 ArrayList<Integer> listCoordY = new ArrayList<Integer>();
@@ -230,31 +229,30 @@ public class Visual
                 return x - ((maxLenght*9) / 2);
             }
 
-            private int getCoordY(int maxLenght, int radius,  int x, int y, int idxCurrentVertex)
+            private int getCoordY(int maxLenght, int radius,  int x, int y, int idxCurrentVertex, int idxCurrentMatrix)
             {
                 int count = 0;
                 int centralVertex = 0;
-                for(int k = 0; k < coordList.size(); k++) {
 
-                        for (int j = 0; j < adjacencyMatrixList.get(k).length; ++j)
-                            if (adjacencyMatrixList.get(k)[idxCurrentVertex][j] == 1)
-                            {
-                                centralVertex = j;
-                                count ++;
-                            }
+                for (int j = 0; j < adjacencyMatrixList.get(idxCurrentMatrix).length; ++j)
+                if (adjacencyMatrixList.get(idxCurrentMatrix)[idxCurrentVertex][j] == 1)
+                {
+                    centralVertex = j;
+                    count ++;
+                }
 
-                    if(count == 1)
+                if(count == 1)
+                {
+                    if(y > coordList.get(idxCurrentMatrix)[2 * centralVertex + 1])
                     {
-                        if(y > coordList.get(k)[2 * centralVertex + 1])
-                        {
-                            return y + 15;
-                        }
-                        else
-                        {
-                            return y - (maxLenght * 7);
-                        }
+                        return y + 15;
+                    }
+                    else
+                    {
+                        return y - (maxLenght * 7);
                     }
                 }
+
 
                 ArrayList<Integer> listCoordX = new ArrayList<Integer>();
                 ArrayList<Integer> listCoordY = new ArrayList<Integer>();
