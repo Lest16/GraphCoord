@@ -9,14 +9,12 @@ public class Vertex
         this.caption = caption;
     }
 
-    public Vertex(int size)
-    {
+    public Vertex(int size) {
         this.size = size;
         this.caption = getRandomWord();
     }
 
-    private String getRandomWord()
-    {
+    private String getRandomWord() {
         String dict = "abcdefghijklmnopqrstuvwxyz1234567890";
         int topBound = 3 + (int)(Math.random() * 4);
         int countWordBound = 1 + (int)(Math.random() * 4);

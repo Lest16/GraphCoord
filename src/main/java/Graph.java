@@ -37,9 +37,9 @@ public class Graph
         return graphList;
     }
 
-    public ArrayList<Integer> readDot() throws Exception
+    public ArrayList<Integer> readDot(String filename) throws Exception
     {
-        BufferedReader fin = new BufferedReader( new InputStreamReader(new FileInputStream("src/main/resources/countDot")));
+        BufferedReader fin = new BufferedReader( new InputStreamReader(new FileInputStream("src/main/resources/data/Dot/" + filename)));
         List<String> fileContent = new ArrayList<String>();
         String str;
         while((str = fin.readLine()) != null)

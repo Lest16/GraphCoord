@@ -1,9 +1,10 @@
 import java.util.ArrayList;
 
+
 public class Main
 {
-    public static void main(String[] args) throws Exception
-    {
+    public static void main(String[] args) throws Exception {
+        long start = System.currentTimeMillis();
         for (int k = 1; k <= 50; k++) {
             Graph graph = new Graph();
             Params params = new Params();
@@ -20,7 +21,7 @@ public class Main
             }
 
             int[][] mainMatr = graph.createMatrix(graphList.size());
-            ArrayList<Integer> sizeDotList = graph.readDot();
+            ArrayList<Integer> sizeDotList = graph.readDot(String.valueOf(k));
             int indent = 0;
             if (sizeDotList.size() != 0) {
                 indent = 70;
@@ -32,7 +33,6 @@ public class Main
             ArrayList<int[][]> adjacencyMatrixList = new ArrayList<int[][]>();
             for (int l = 0; l < mainMatr.length; ++l) {
                 params.meanSpringLength = ((params.height + params.width - indent)) / (graphList.get(l).length * graphList.size());
-                //params.meanSpringLength = 195;
                 coordList.add(graph.getCoord(graphList.get(l), params, 0, 0, (int) coordVertexMainGraph[2 * l],
                         (int) coordVertexMainGraph[2 * l + 1]));
                 adjacencyMatrixList.add(graphList.get(l));
@@ -45,6 +45,11 @@ public class Main
             }
 
             visual.Draw(sizeDotList, distance, allVertices, String.valueOf(k));
+            System.out.println(k);
         }
+
+        long finish = System.currentTimeMillis();
+        long timeConsumedMillis = finish - start;
+        System.out.println(timeConsumedMillis);
     }
 }

@@ -114,20 +114,28 @@ public class Visual
                                     }
                                 }
                             }
-                            int position = 10;
-                            for (int l = 0; l < sizeDotList.size(); ++l) {
-                                Integer size = sizeDotList.get(l);
-                                out.print("<circle cx=\"" + position + "\" cy=\"" + 20 + "\"  " +
-                                        "r=\"" + size + "\" style=\"fill:black; fill-opacity:0.4; stroke-width:4px;\" /> \n");
-                                position += distance;
-                            }
                         }
 
-                    out.print("\n" +
-                            "</svg>\n" +
-                            "\n" +
-                            "</html>");
-                    } finally {
+                        int position = 10;
+                        for (int l = 0; l < sizeDotList.size(); ++l) {
+                            Vertex vertex = new Vertex(5);
+                            int y = 18;
+                            String[] caption = vertex.caption.split(" ");
+                            for (int m = 0; m < caption.length; m++)
+                            {
+                                out.print("<text  x=\"" + (position + 10) + "\" y=\"" + y + "\" font-size=\"13px\"> " +
+                                        caption[m] + " </text> \n");
+                                y += 10;
+                            }
+                            Integer size = sizeDotList.get(l);
+                            out.print("<circle cx=\"" + position + "\" cy=\"" + 18 + "\"  " +
+                                    "r=\"" + size + "\" style=\"fill:black; fill-opacity:0.4; stroke-width:4px;\" /> \n");
+                            position += distance;
+                         }
+
+                        out.print("\n" + "</svg>\n" + "\n" + "</html>");
+                    }
+                    finally {
                         out.close();
                     }
                 } catch(IOException e) {
