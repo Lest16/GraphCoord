@@ -33,7 +33,7 @@ public class Main
             ArrayList<int[][]> adjacencyMatrixList = new ArrayList<int[][]>();
             for (int l = 0; l < mainMatr.length; ++l) {
                 params.meanSpringLength = ((params.height + params.width - indent)) / (graphList.get(l).length * graphList.size());
-                coordList.add(graph.getCoord(graphList.get(l), params, 0, 0, (int) coordVertexMainGraph[2 * l],
+                coordList.add(graph.getCoord(graphList.get(l), params, 70, 30, (int) coordVertexMainGraph[2 * l],
                         (int) coordVertexMainGraph[2 * l + 1]));
                 adjacencyMatrixList.add(graphList.get(l));
             }

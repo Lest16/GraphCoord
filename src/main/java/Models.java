@@ -3,44 +3,28 @@ public class Models
     public int[][] g;
     private Params params;
 
-    public Models(int[][] g, Params params)
-    {
+    public Models(int[][] g, Params params) {
         this.g = g;
         this.params = params;
     }
 
-    private double LogSpring(double dl)
-    {
+    private double LogSpring(double dl) {
         return this.params.spring * (dl * Math.log(dl/this.params.meanSpringLength) - dl);
     }
 
-    private double Coulomb(double dl)
-    {
+    private double Coulomb(double dl) {
         return this.params.q2 / dl;
     }
 
-    private double edge(double dl)
-    {
+    private double edge(double dl) {
         return params.q2 / (dl*dl) - params.spring * Math.log(dl / params.meanSpringLength);
     }
 
-    private double noEdge(double dl)
-    {
+    private double noEdge(double dl) {
         return params.q2 / (dl*dl);
     }
 
-    /**
-     * Простейшая модель поведения графа.
-     * Параметры модели:
-     * graph - граф, на основании которого моделируется система
-     * edge - сила притягивания между двумя смежными вершинами
-     * noedge - сила притягивания (хотя чаще знак отрицателен - отталкивание) между двумя несмежными вершинами
-     * притягивание и отталкивание являются функциями расстояния между вершинами
-     * Возвращается функция, которая положению и скорости сопоставляется сила
-     * Положение задаётся массивом координат, на нечетных позициях абсцисса, на нечетных - ордината
-     */
-    private double[] EdgeNodeForce(double[] r)
-    {
+    private double[] EdgeNodeForce(double[] r) {
         double[] f = new double[2 * this.g.length];
         int i;
         for(i = 0; i < this.g.length; ++i)
@@ -59,22 +43,16 @@ public class Models
                 f[2*i+1] += fy;
                 f[2*j+1] -= fy;
             }
+
         return f;
 
     }
 
-    private double friction(double v)
-    {
+    private double friction(double v) {
         return params.gamma * v;
     }
 
-    /**
-     * Модель поведения, разделяющая потенциальную силу и силу трения.
-     * force - потенциальная сила, воздействующая на систему, функция состояния (массива коорд.), возвращающая массив коорд. силы.
-     * friction - функциональная зависимость модуля силы трения на одну частицу от модуля скорости.
-     */
-    public double[] ForceFrictionModel(double[] r, double[] v)
-    {
+    public double[] ForceFrictionModel(double[] r, double[] v) {
         int n = r.length / 2;
         double[] f = EdgeNodeForce(r);
         for(int i = 0; i < n; ++i) {
@@ -83,12 +61,11 @@ public class Models
             f[2*i] -= friction(dv) * v[2*i] / dv;
             f[2*i+1] -= friction(dv) * v[2*i+1] / dv;
         }
+
         return f;
     }
 
-    /* Energy of system */
     public double SpringChargeEnergy(double[] r) {
-
         double E = 0;
         for(int i = 0; i < this.g.length; ++i)
             for(int j = i + 1; j < this.g.length; ++j) {

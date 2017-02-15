@@ -12,8 +12,7 @@ public class Params
 
     private FileInputStream fis;
 
-    public Params() throws Exception
-    {
+    public Params() throws Exception {
         Properties property = new Properties();
         this.fis = new FileInputStream("src/main/resources/config");
         property.load(fis);
