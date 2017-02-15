@@ -1,8 +1,13 @@
+package com.tecomgroup.energetics.client.graph.run;
+
+import com.tecomgroup.energetics.client.graph.Graph;
+import com.tecomgroup.energetics.client.graph.Params;
+import com.tecomgroup.energetics.client.graph.Vertex;
+import com.tecomgroup.energetics.client.graph.Visual;
+
 import java.util.ArrayList;
 
-
-public class Main
-{
+public class Main {
     public static void main(String[] args) throws Exception {
         long start = System.currentTimeMillis();
         for (int k = 1; k <= 50; k++) {
@@ -32,9 +37,10 @@ public class Main
             ArrayList<double[]> coordList = new ArrayList<double[]>();
             ArrayList<int[][]> adjacencyMatrixList = new ArrayList<int[][]>();
             for (int l = 0; l < mainMatr.length; ++l) {
-                params.meanSpringLength = ((params.height + params.width - indent)) / (graphList.get(l).length * graphList.size());
-                coordList.add(graph.getCoord(graphList.get(l), params, 70, 30, (int) coordVertexMainGraph[2 * l],
-                        (int) coordVertexMainGraph[2 * l + 1]));
+                params.meanSpringLength = ((params.height + params.width - indent)) /
+                        (graphList.get(l).length * graphList.size());
+                coordList.add(graph.getCoord(graphList.get(l), params, 70, 30,
+                        (int) coordVertexMainGraph[2 * l], (int) coordVertexMainGraph[2 * l + 1]));
                 adjacencyMatrixList.add(graphList.get(l));
             }
 

@@ -1,5 +1,6 @@
-public class Vertex
-{
+package com.tecomgroup.energetics.client.graph;
+
+public class Vertex {
     public final int size;
     public final String caption;
 

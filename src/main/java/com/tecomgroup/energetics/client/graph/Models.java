@@ -1,5 +1,6 @@
-public class Models
-{
+package com.tecomgroup.energetics.client.graph;
+
+public class Models {
     public int[][] g;
     private Params params;
 

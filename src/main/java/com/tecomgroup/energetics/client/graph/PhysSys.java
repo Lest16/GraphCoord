@@ -1,5 +1,6 @@
-public class PhysSys
-{
+package com.tecomgroup.energetics.client.graph;
+
+public class PhysSys {
     private Models models;
 
     private int CountIteration = 0;

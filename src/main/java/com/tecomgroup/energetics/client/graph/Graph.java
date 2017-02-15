@@ -1,15 +1,17 @@
+package com.tecomgroup.energetics.client.graph;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Graph
-{
+public class Graph {
     public ArrayList<int[][]> readGraphs(String filename) throws Exception {
         int[][] matrix;
         ArrayList<int[][]> graphList = new ArrayList<int[][]>();
-        BufferedReader fin = new BufferedReader( new InputStreamReader(new FileInputStream("src/main/resources/data/Graphs/" + filename)));
+        BufferedReader fin = new BufferedReader(
+                new InputStreamReader(new FileInputStream("src/main/resources/data/Graphs/" + filename)));
         List<String> fileContent = new ArrayList<String>();
         String str;
         while((str = fin.readLine()) != null) {
@@ -34,7 +36,8 @@ public class Graph
     }
 
     public ArrayList<Integer> readDot(String filename) throws Exception {
-        BufferedReader fin = new BufferedReader( new InputStreamReader(new FileInputStream("src/main/resources/data/Dot/" + filename)));
+        BufferedReader fin = new BufferedReader(
+                new InputStreamReader(new FileInputStream("src/main/resources/data/Dot/" + filename)));
         List<String> fileContent = new ArrayList<String>();
         String str;
         while((str = fin.readLine()) != null) {

@@ -1,8 +1,9 @@
+package com.tecomgroup.energetics.client.graph;
+
 import java.io.FileInputStream;
 import java.util.Properties;
 
-public class Params
-{
+public class Params {
     public double gamma;
     public double meanSpringLength;
     public double spring;

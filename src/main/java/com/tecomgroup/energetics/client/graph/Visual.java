@@ -1,10 +1,11 @@
+package com.tecomgroup.energetics.client.graph;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-public class Visual
-{
+public class Visual {
     private final int width;
     private final int height;
     private ArrayList<int[][]> adjacencyMatrixList;
@@ -12,8 +13,7 @@ public class Visual
     public int radius;
     public int maxLenght;
 
-    public Visual(int width, int height, ArrayList<int[][]> adjacencyMatrixList, ArrayList<double[]> coordList)
-    {
+    public Visual(int width, int height, ArrayList<int[][]> adjacencyMatrixList, ArrayList<double[]> coordList) {
         this.width = width;
         this.height = height;
         this.adjacencyMatrixList = adjacencyMatrixList;
