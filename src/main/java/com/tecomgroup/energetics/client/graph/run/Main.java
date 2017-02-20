@@ -3,7 +3,7 @@ package com.tecomgroup.energetics.client.graph.run;
 import com.tecomgroup.energetics.client.graph.Graph;
 import com.tecomgroup.energetics.client.graph.Params;
 import com.tecomgroup.energetics.client.graph.Vertex;
-import com.tecomgroup.energetics.client.graph.Visual;
+import com.tecomgroup.energetics.client.graph.Visualizer;
 
 import java.util.ArrayList;
 
@@ -12,7 +12,7 @@ public class Main {
         long start = System.currentTimeMillis();
         for (int k = 1; k <= 50; k++) {
             Graph graph = new Graph();
-            Params params = new Params();
+            Params params = Params.createFromFile("src/main/resources/config");
             ArrayList<int[][]> graphList = graph.readGraphs(String.valueOf(k));
             ArrayList<int[]> sizesVertex = graph.getSizesVertex();
             ArrayList<ArrayList<Vertex>> allVertices = new ArrayList<ArrayList<Vertex>>();
@@ -44,13 +44,13 @@ public class Main {
                 adjacencyMatrixList.add(graphList.get(l));
             }
 
-            Visual visual = new Visual(params.width, params.height, adjacencyMatrixList, coordList);
+            Visualizer visualizer = new Visualizer(params.width, params.height, adjacencyMatrixList, coordList);
             int distance = 0;
             if (sizeDotList.size() != 0) {
                 distance = params.width / sizeDotList.size();
             }
 
-            visual.Draw(sizeDotList, distance, allVertices, String.valueOf(k));
+            visualizer.Draw(sizeDotList, distance, allVertices, String.valueOf(k));
             System.out.println(k);
         }
 

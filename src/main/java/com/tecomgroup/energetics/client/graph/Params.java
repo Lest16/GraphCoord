@@ -1,27 +1,30 @@
 package com.tecomgroup.energetics.client.graph;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Properties;
 
 public class Params {
-    public double gamma;
-    public double meanSpringLength;
-    public double spring;
-    public int q2;
-    public int width;
-    public int height;
+    public static double gamma;
+    public static double meanSpringLength;
+    public static double spring;
+    public static int q2;
+    public static int width;
+    public static int height;
 
-    private FileInputStream fis;
+    private static FileInputStream fis;
 
-    public Params() throws Exception {
+    public static Params createFromFile(String path) throws IOException {
+        Params params = new Params();
         Properties property = new Properties();
-        this.fis = new FileInputStream("src/main/resources/config");
+        fis = new FileInputStream(path);
         property.load(fis);
-        this.gamma = Double.parseDouble(property.getProperty("gamma"));
-        this.meanSpringLength = Double.parseDouble(property.getProperty("meanSpringLength"));
-        this.spring = Double.parseDouble(property.getProperty("spring"));
-        this.q2 = Integer.parseInt(property.getProperty("q2"));
-        this.width = Integer.parseInt(property.getProperty("width"));
-        this.height = Integer.parseInt(property.getProperty("height"));
+        params.gamma = Double.parseDouble(property.getProperty("gamma"));
+        params.meanSpringLength = Double.parseDouble(property.getProperty("meanSpringLength"));
+        params.spring = Double.parseDouble(property.getProperty("spring"));
+        params.q2 = Integer.parseInt(property.getProperty("q2"));
+        params.width = Integer.parseInt(property.getProperty("width"));
+        params.height = Integer.parseInt(property.getProperty("height"));
+        return params;
     }
 }
