@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class CalculateCoordService {
     private final GraphUtils graphUtils;
-    private ArrayList<int[][]> graphList;
+    private final ArrayList<int[][]> graphList;
     private final Params params;
     public final ArrayList<FullGraph> fullGraphs = new ArrayList<FullGraph>();
 

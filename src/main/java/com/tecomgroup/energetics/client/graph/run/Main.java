@@ -39,7 +39,7 @@ public class Main {
             CalculateCoordService calculateCoordService = new CalculateCoordService(graphUtils, graphList, params);
             coordList = calculateCoordService.CalculateCoord(indent);
             calculateCoordService.GetCoordFullGraph(coordList);
-            PackagingService packagingService = new PackagingService();
+            PackagingService packagingService = new PackagingService(coordList, calculateCoordService.fullGraphs);
             Visualizer visualizer = new Visualizer(params.width, params.height, adjacencyMatrixList, coordList, calculateCoordService.fullGraphs);
             int distance = 0;
             if (sizeDotList.size() != 0) {
