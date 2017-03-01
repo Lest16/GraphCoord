@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Graph {
+public class GraphUtils {
     public ArrayList<int[][]> readGraphs(String filename) throws Exception {
         int[][] matrix;
         ArrayList<int[][]> graphList = new ArrayList<int[][]>();

@@ -1,8 +1,5 @@
 package com.tecomgroup.energetics.client.graph;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public class Visualizer {
@@ -22,115 +19,82 @@ public class Visualizer {
 
     public void Draw(final ArrayList<Integer> sizeDotList, final int distance,
                      final ArrayList<ArrayList<Vertex>> allVertices, String filename) throws Exception {
-        File file = new File("outputSVG/" + filename + ".html");
-        try {
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-            PrintWriter out = new PrintWriter(file.getAbsoluteFile());
-            try {
-                Graph graph = new Graph();
-                out.print("<html>\n" +
-                        "\n" +
-                        "<svg viewBox=\"0 0 " + this.width + " " + this.height + "\" width=\" " + this.width + "\" " +
-                        "height=\" " + this.height + "\" preserveAspectRatio=\"xMidYMid meet\"  " +
-                        "xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n");
-                for (int k = 0; k < coordList.size(); k++) {
-                    double[] coordGraph = coordList.get(k);
-                    int[][] adjacencyMatrix = adjacencyMatrixList.get(k);
-                    if (graph.IsFullGraph(adjacencyMatrix)) {
-                        int indent = this.width / (coordGraph.length * coordList.size()) + coordGraph.length;
-                        int lastCoordX = (int) coordGraph[0] - indent * adjacencyMatrix.length / 2;
-                        int rightX = lastCoordX + (indent * adjacencyMatrix.length);
-                        out.print("\t<line x1=\"" + lastCoordX + "\" y1=\"" + (int) coordGraph[1] +
-                                "\" x2=\"" + rightX + "\" y2=\"" + (int) coordGraph[1] +
-                                "\" stroke-width=\"2\" stroke=\"rgb(0,0,0)\"/>  \n" + "\n");
-                        for (int i = 0; i < adjacencyMatrix.length - 1; ++i) {
-                            Vertex vertex = new Vertex(9);
-                            if (i % 2 == 0) {
-                                out.print("\t<line x1=\"" + (lastCoordX + indent) + "\" y1=\"" + (int) coordGraph[1] +
-                                        "\" x2=\"" + (lastCoordX + indent) + "\" y2=\"" + (int) ((coordGraph[1] + indent) - vertex.size) +
-                                        "\" stroke-width=\"2\" stroke=\"rgb(0,0,0)\"/>  \n" +
-                                        "   \n");
-                                out.print("<circle cx=\"" +  (lastCoordX + indent) + "\" cy=\"" + (coordGraph[1] + indent) + "\"  " +
-                                        "r=\"" + vertex.size + "\" style=\"fill:black; fill-opacity:0.4; stroke-width:4px;\" /> \n");
-                                int y = (int) (coordGraph[1] + indent);
-                                String[] caption = vertex.caption.split(" ");
-                                for (int m = 0; m < caption.length; m++) {
-                                    out.print("<text  x=\"" + ((lastCoordX + indent) + 10) + "\" y=\"" + y +
-                                            "\" font-size=\"13px\"> " + caption[m] + " </text> \n");
-                                    y += 10;
-                                }
-                            } else {
-                                out.print("\t<line x1=\"" + (lastCoordX + indent) + "\" y1=\"" + (int) coordGraph[1] +
-                                        "\" x2=\"" + (lastCoordX + indent) + "\" y2=\"" + (int) ((coordGraph[1] - indent) + vertex.size) +
-                                        "\" stroke-width=\"2\" stroke=\"rgb(0,0,0)\"/>  \n" +
-                                        "   \n");
-                                out.print("<circle cx=\"" + (int) (lastCoordX + indent) + "\" cy=\"" + (coordGraph[1] - indent) + "\"  " +
-                                        "r=\"" + vertex.size + "\" style=\"fill:black; fill-opacity:0.4; stroke-width:4px;\" /> \n");
-                                int y = (int) (coordGraph[1] - indent);
-                                String[] caption = vertex.caption.split(" ");
-                                for (int m = 0; m < caption.length; m++) {
-                                    out.print("<text  x=\"" + ((lastCoordX + indent) + 10) + "\" y=\"" + y + "\" font-size=\"13px\"> " +
-                                            caption[m] + " </text> \n");
-                                    y += 10;
-                                }
-                            }
-                            lastCoordX += indent;
+        GraphUtils graphUtils = new GraphUtils();
+        SvgWriter svgWriter = new SvgWriter();
+        for (int k = 0; k < coordList.size(); k++) {
+            double[] coordGraph = coordList.get(k);
+            int[][] adjacencyMatrix = adjacencyMatrixList.get(k);
+            if (graphUtils.IsFullGraph(adjacencyMatrix)) {
+                int indent = this.width / (coordGraph.length * coordList.size()) + coordGraph.length;
+                int lastCoordX = (int) coordGraph[0] - indent * adjacencyMatrix.length / 2;
+                int rightX = lastCoordX + (indent * adjacencyMatrix.length);
+                svgWriter.addLine(lastCoordX, (int)coordGraph[1], rightX, (int)coordGraph[1]);
+                for (int i = 0; i < adjacencyMatrix.length - 1; ++i) {
+                    Vertex vertex = new Vertex(9);
+                    if (i % 2 == 0) {
+                        svgWriter.addLine(lastCoordX + indent, (int) coordGraph[1], lastCoordX + indent,
+                                (int) ((coordGraph[1] + indent) - vertex.size));
+                        svgWriter.addCircle(lastCoordX + indent, (int)coordGraph[1] + indent, vertex.size);
+                        int y = (int) (coordGraph[1] + indent);
+                        String[] caption = vertex.caption.split(" ");
+                        for (int m = 0; m < caption.length; m++) {
+                            svgWriter.addText(((lastCoordX + indent) + 10), y, caption[m], " font-size=\"13px\"");
+                            y += 10;
                         }
                     } else {
-                        for (int i = 0; i < adjacencyMatrix.length; ++i)
-                            for (int j = i + 1; j < adjacencyMatrix.length; ++j)
-                                if (adjacencyMatrix[i][j] == 1) {
-                                    out.print("\t<line x1=\"" + (int) coordGraph[2 * i] + "\" y1=\"" + (int) coordGraph[2 * i + 1] +
-                                            "\" x2=\"" + (int) coordGraph[2 * j] + "\" y2=\"" + (int) coordGraph[2 * j + 1] +
-                                            "\" stroke-width=\"2\" stroke=\"rgb(0,0,0)\"/>  \n" +
-                                            "   \n");
-                                }
-
-                        for (int l = 0; l < adjacencyMatrix.length; ++l) {
-                            Vertex vertex = new Vertex(9);
-                            out.print("<circle cx=\"" + (int) coordGraph[2 * l] + "\" cy=\"" + (int) coordGraph[2 * l + 1] + "\"  " +
-                                    "r=\"" + vertex.size + "\" style=\"fill:black; fill-opacity:0.4; stroke-width:4px;\" /> \n");
-                            String[] caption = vertex.caption.split(" ");
-                            this.maxLenght = GetMaxLength(caption);
-                            this.radius = GetRadius(caption, maxLenght);
-                            int x = this.getCoordX(maxLenght, radius, (int) coordGraph[2 * l], (int) coordGraph[2 * l + 1], l, k);
-                            int y = this.getCoordY(caption.length, radius, (int) coordGraph[2 * l], (int) coordGraph[2 * l + 1], l, k);
-                            for (int m = 0; m < caption.length; m++) {
-                                out.print("<text  x=\"" + x + "\" y=\"" + y + "\" font-size=\"13px\"> " + caption[m] + " </text> \n");
-                                y += 10;
-                            }
+                        svgWriter.addLine(lastCoordX + indent, (int) coordGraph[1], lastCoordX + indent,
+                                (int) ((coordGraph[1] - indent) + vertex.size));
+                        svgWriter.addCircle(lastCoordX + indent, (int)coordGraph[1] - indent, vertex.size);
+                        int y = (int) (coordGraph[1] - indent);
+                        String[] caption = vertex.caption.split(" ");
+                        for (int m = 0; m < caption.length; m++) {
+                            svgWriter.addText(((lastCoordX + indent) + 10), y, caption[m], " font-size=\"13px\"");
+                            y += 10;
                         }
                     }
+                    lastCoordX += indent;
                 }
+            } else {
+                for (int i = 0; i < adjacencyMatrix.length; ++i)
+                    for (int j = i + 1; j < adjacencyMatrix.length; ++j)
+                        if (adjacencyMatrix[i][j] == 1) {
+                            svgWriter.addLine((int) coordGraph[2 * i], (int) coordGraph[2 * i + 1],
+                                    (int) coordGraph[2 * j], (int) coordGraph[2 * j + 1]);
+                        }
 
-                int position = 10;
-                for (int l = 0; l < sizeDotList.size(); ++l) {
+                for (int l = 0; l < adjacencyMatrix.length; ++l) {
                     Vertex vertex = new Vertex(9);
-                    int y = 18;
+                    svgWriter.addCircle((int) coordGraph[2 * l], (int) coordGraph[2 * l + 1], vertex.size);
                     String[] caption = vertex.caption.split(" ");
+                    this.maxLenght = GetMaxLength(caption);
+                    this.radius = GetRadius(caption, maxLenght);
+                    int x = this.getCoordX(maxLenght, radius, (int) coordGraph[2 * l], (int) coordGraph[2 * l + 1], l, k);
+                    int y = this.getCoordY(caption.length, radius, (int) coordGraph[2 * l], (int) coordGraph[2 * l + 1], l, k);
                     for (int m = 0; m < caption.length; m++) {
-                        out.print("<text  x=\"" + (position + 10) + "\" y=\"" + y + "\" font-size=\"13px\"> " +
-                                caption[m] + " </text> \n");
+                        svgWriter.addText(x, y, caption[m], " font-size=\"13px\"");
                         y += 10;
                     }
-                    Integer size = sizeDotList.get(l);
-                    out.print("<circle cx=\"" + position + "\" cy=\"" + 18 + "\"  " +
-                            "r=\"" + size + "\" style=\"fill:black; fill-opacity:0.4; stroke-width:4px;\" /> \n");
-                    position += distance;
                 }
-
-                out.print("<text  x=\"" + 10 + "\" y=\"" + 70 +
-                        "\" font-size=\"14px\"  font-weight=\"bold\"> " + sizeDotList.size() + " free vertex" + " </text> \n");
-
-                out.print("\n" + "</svg>\n" + "\n" + "</html>");
-            } finally {
-                out.close();
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
+
+        int position = 10;
+        for (int l = 0; l < sizeDotList.size(); ++l) {
+            Vertex vertex = new Vertex(9);
+            int y = 18;
+            String[] caption = vertex.caption.split(" ");
+            for (int m = 0; m < caption.length; m++) {
+                svgWriter.addText(position + 10, y, caption[m], " font-size=\"13px\"");
+                y += 10;
+            }
+            Integer size = sizeDotList.get(l);
+            svgWriter.addCircle(position, 18, size);
+            position += distance;
+        }
+
+        svgWriter.addText(10, 70, sizeDotList.size() + " free vertex",
+                " font-size=\"14px\" font-weight=\"bold\"");
+        svgWriter.writeSvg(filename, this.width, this.height);
     }
 
     private int getCoordX(int maxLenght, int radius, int x, int y, int idxCurrentVertex, int idxCurrentMatrix) {
