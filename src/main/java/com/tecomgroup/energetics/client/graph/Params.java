@@ -5,19 +5,17 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class Params {
-    public static double gamma;
-    public static double meanSpringLength;
-    public static double spring;
-    public static int q2;
-    public static int width;
-    public static int height;
-
-    private static FileInputStream fis;
+    public double gamma;
+    public double meanSpringLength;
+    public double spring;
+    public int q2;
+    public int width;
+    public int height;
 
     public static Params createFromFile(String path) throws IOException {
         Params params = new Params();
         Properties property = new Properties();
-        fis = new FileInputStream(path);
+        FileInputStream fis = new FileInputStream(path);
         property.load(fis);
         params.gamma = Double.parseDouble(property.getProperty("gamma"));
         params.meanSpringLength = Double.parseDouble(property.getProperty("meanSpringLength"));

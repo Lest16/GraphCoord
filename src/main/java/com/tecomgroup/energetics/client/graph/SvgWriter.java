@@ -19,9 +19,9 @@ public class SvgWriter {
                 "r=\"" + r + "\" style=\"fill:black; fill-opacity:0.4; stroke-width:4px;\" /> \n");
     }
 
-    public void addText(int x, int y, String caption) {
+    public void addText(int x, int y, String caption, String params) {
         svgBuilder.add("<text  x=\"" + x + "\" y=\"" + y +
-                "\" font-size=\"13px\"> " + caption + " </text> \n");
+                "\" " + params + "> " + caption + " </text> \n");
     }
 
     public void writeSvg(String filename, int width, int height) {
