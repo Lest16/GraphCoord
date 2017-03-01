@@ -118,4 +118,9 @@ public class GraphUtils {
         }
         return physSys.centralize(centX, centY, deviationX, deviationY);
     }
+
+    public void getCoordFullGraph()
+    {
+
+    }
 }

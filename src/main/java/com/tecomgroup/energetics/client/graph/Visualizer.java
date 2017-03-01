@@ -7,53 +7,59 @@ public class Visualizer {
     private final int height;
     private ArrayList<int[][]> adjacencyMatrixList;
     private ArrayList<double[]> coordList;
+    private ArrayList<FullGraph> fullGraphs;
     public int radius;
     public int maxLenght;
 
-    public Visualizer(int width, int height, ArrayList<int[][]> adjacencyMatrixList, ArrayList<double[]> coordList) {
+    public Visualizer(int width, int height, ArrayList<int[][]> adjacencyMatrixList, ArrayList<double[]> coordList,
+                      ArrayList<FullGraph> fullGraphs) {
         this.width = width;
         this.height = height;
         this.adjacencyMatrixList = adjacencyMatrixList;
         this.coordList = coordList;
+        this.fullGraphs = fullGraphs;
     }
 
     public void Draw(final ArrayList<Integer> sizeDotList, final int distance,
                      final ArrayList<ArrayList<Vertex>> allVertices, String filename) throws Exception {
         GraphUtils graphUtils = new GraphUtils();
         SvgWriter svgWriter = new SvgWriter();
+        int countFullGraph = 0;
         for (int k = 0; k < coordList.size(); k++) {
             double[] coordGraph = coordList.get(k);
             int[][] adjacencyMatrix = adjacencyMatrixList.get(k);
             if (graphUtils.IsFullGraph(adjacencyMatrix)) {
-                int indent = this.width / (coordGraph.length * coordList.size()) + coordGraph.length;
-                int lastCoordX = (int) coordGraph[0] - indent * adjacencyMatrix.length / 2;
-                int rightX = lastCoordX + (indent * adjacencyMatrix.length);
-                svgWriter.addLine(lastCoordX, (int)coordGraph[1], rightX, (int)coordGraph[1]);
+                FullGraph fullGraph = this.fullGraphs.get(countFullGraph);
+                svgWriter.addLine(fullGraph.leftX, fullGraph.basicY, fullGraph.rightX, fullGraph.basicY);
+                int lastCoordX = fullGraph.leftX;
                 for (int i = 0; i < adjacencyMatrix.length - 1; ++i) {
                     Vertex vertex = new Vertex(9);
                     if (i % 2 == 0) {
-                        svgWriter.addLine(lastCoordX + indent, (int) coordGraph[1], lastCoordX + indent,
-                                (int) ((coordGraph[1] + indent) - vertex.size));
-                        svgWriter.addCircle(lastCoordX + indent, (int)coordGraph[1] + indent, vertex.size);
-                        int y = (int) (coordGraph[1] + indent);
+                        svgWriter.addLine(lastCoordX + fullGraph.indent, fullGraph.basicY, lastCoordX + fullGraph.indent,
+                                (fullGraph.basicY + fullGraph.indent) - vertex.size);
+                        svgWriter.addCircle(lastCoordX + fullGraph.indent, fullGraph.basicY + fullGraph.indent, vertex.size);
+                        int y = fullGraph.basicY + fullGraph.indent;
                         String[] caption = vertex.caption.split(" ");
                         for (int m = 0; m < caption.length; m++) {
-                            svgWriter.addText(((lastCoordX + indent) + 10), y, caption[m], " font-size=\"13px\"");
+                            svgWriter.addText(((lastCoordX + fullGraph.indent) + 10), y, caption[m], " font-size=\"13px\"");
                             y += 10;
                         }
                     } else {
-                        svgWriter.addLine(lastCoordX + indent, (int) coordGraph[1], lastCoordX + indent,
-                                (int) ((coordGraph[1] - indent) + vertex.size));
-                        svgWriter.addCircle(lastCoordX + indent, (int)coordGraph[1] - indent, vertex.size);
-                        int y = (int) (coordGraph[1] - indent);
+                        svgWriter.addLine(lastCoordX + fullGraph.indent, fullGraph.basicY, lastCoordX + fullGraph.indent,
+                                (fullGraph.basicY - fullGraph.indent) + vertex.size);
+                        svgWriter.addCircle(lastCoordX + fullGraph.indent, fullGraph.basicY - fullGraph.indent, vertex.size);
+                        int y = fullGraph.basicY - fullGraph.indent;
                         String[] caption = vertex.caption.split(" ");
                         for (int m = 0; m < caption.length; m++) {
-                            svgWriter.addText(((lastCoordX + indent) + 10), y, caption[m], " font-size=\"13px\"");
+                            svgWriter.addText(((lastCoordX + fullGraph.indent) + 10), y, caption[m], " font-size=\"13px\"");
                             y += 10;
                         }
                     }
-                    lastCoordX += indent;
+
+                    lastCoordX += fullGraph.indent;
                 }
+
+                countFullGraph++;
             } else {
                 for (int i = 0; i < adjacencyMatrix.length; ++i)
                     for (int j = i + 1; j < adjacencyMatrix.length; ++j)

@@ -1,9 +1,8 @@
 package com.tecomgroup.energetics.client.graph.run;
 
-import com.tecomgroup.energetics.client.graph.GraphUtils;
-import com.tecomgroup.energetics.client.graph.Params;
-import com.tecomgroup.energetics.client.graph.Vertex;
-import com.tecomgroup.energetics.client.graph.Visualizer;
+import com.tecomgroup.energetics.client.graph.*;
+import com.tecomgroup.energetics.client.graph.Services.CalculateCoordService;
+import com.tecomgroup.energetics.client.graph.Services.PackagingService;
 
 import java.util.ArrayList;
 
@@ -25,26 +24,23 @@ public class Main {
                 allVertices.add(vertices);
             }
 
-            int[][] mainMatr = graphUtils.createMatrix(graphList.size());
+            //int[][] mainMatr = graphUtils.createMatrix(graphList.size());
             ArrayList<Integer> sizeDotList = graphUtils.readDot(String.valueOf(k));
             int indent = 0;
             if (sizeDotList.size() != 0) {
                 indent = 70;
             }
-            params.meanSpringLength = ((params.height + params.width - indent) / 2) / 2;
-            double[] coordVertexMainGraph = graphUtils.getCoord(mainMatr, params, params.width / 2,
-                    (params.height + indent) / 2, 0, 0);
-            ArrayList<double[]> coordList = new ArrayList<double[]>();
+            //params.meanSpringLength = ((params.height + params.width - indent) / 2) / 2;
+           // double[] coordVertexMainGraph = graphUtils.getCoord(mainMatr, params, params.width / 2,
+            //        (params.height + indent) / 2, 0, 0);
+            ArrayList<double[]> coordList;
             ArrayList<int[][]> adjacencyMatrixList = new ArrayList<int[][]>();
-            for (int l = 0; l < mainMatr.length; ++l) {
-                params.meanSpringLength = ((params.height + params.width - indent)) /
-                        (graphList.get(l).length * graphList.size());
-                coordList.add(graphUtils.getCoord(graphList.get(l), params, 70, 30,
-                        (int) coordVertexMainGraph[2 * l], (int) coordVertexMainGraph[2 * l + 1]));
-                adjacencyMatrixList.add(graphList.get(l));
-            }
-
-            Visualizer visualizer = new Visualizer(params.width, params.height, adjacencyMatrixList, coordList);
+            adjacencyMatrixList.addAll(graphList);
+            CalculateCoordService calculateCoordService = new CalculateCoordService(graphUtils, graphList, params);
+            coordList = calculateCoordService.CalculateCoord(indent);
+            calculateCoordService.GetCoordFullGraph(coordList);
+            PackagingService packagingService = new PackagingService();
+            Visualizer visualizer = new Visualizer(params.width, params.height, adjacencyMatrixList, coordList, calculateCoordService.fullGraphs);
             int distance = 0;
             if (sizeDotList.size() != 0) {
                 distance = params.width / sizeDotList.size();
