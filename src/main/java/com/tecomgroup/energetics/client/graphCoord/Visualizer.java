@@ -1,34 +1,27 @@
-package com.tecomgroup.energetics.client.graph;
+package com.tecomgroup.energetics.client.graphCoord;
+
+import com.tecomgroup.energetics.client.graphCoord.Graphs.FullGraph;
 
 import java.util.ArrayList;
 
 public class Visualizer {
     private final int width;
     private final int height;
-    private ArrayList<int[][]> adjacencyMatrixList;
-    private ArrayList<double[]> coordList;
-    private ArrayList<FullGraph> fullGraphs;
-    public int radius;
-    public int maxLenght;
 
-    public Visualizer(int width, int height, ArrayList<int[][]> adjacencyMatrixList, ArrayList<double[]> coordList,
-                      ArrayList<FullGraph> fullGraphs) {
+    public Visualizer(int width, int height) {
         this.width = width;
         this.height = height;
-        this.adjacencyMatrixList = adjacencyMatrixList;
-        this.coordList = coordList;
-        this.fullGraphs = fullGraphs;
     }
 
     public void Draw(final ArrayList<Integer> sizeDotList, final int distance,
                      final ArrayList<ArrayList<Vertex>> allVertices, String filename) throws Exception {
-        GraphUtils graphUtils = new GraphUtils();
+        //GraphUtils graphUtils = new GraphUtils();
         SvgWriter svgWriter = new SvgWriter();
         int countFullGraph = 0;
         for (int k = 0; k < coordList.size(); k++) {
             double[] coordGraph = coordList.get(k);
             int[][] adjacencyMatrix = adjacencyMatrixList.get(k);
-            if (graphUtils.IsFullGraph(adjacencyMatrix)) {
+            if (GraphUtils.IsFullGraph(adjacencyMatrix)) {
                 FullGraph fullGraph = this.fullGraphs.get(countFullGraph);
                 svgWriter.addLine(fullGraph.leftX, fullGraph.basicY, fullGraph.rightX, fullGraph.basicY);
                 int lastCoordX = fullGraph.leftX;
@@ -41,7 +34,7 @@ public class Visualizer {
                         int y = fullGraph.basicY + fullGraph.indent;
                         String[] caption = vertex.caption.split(" ");
                         for (int m = 0; m < caption.length; m++) {
-                            svgWriter.addText(((lastCoordX + fullGraph.indent) + 10), y, caption[m], " font-size=\"13px\"");
+                            svgWriter.addText(((lastCoordX + fullGraph.indent) + 10), y, caption[m]);
                             y += 10;
                         }
                     } else {
@@ -51,7 +44,7 @@ public class Visualizer {
                         int y = fullGraph.basicY - fullGraph.indent;
                         String[] caption = vertex.caption.split(" ");
                         for (int m = 0; m < caption.length; m++) {
-                            svgWriter.addText(((lastCoordX + fullGraph.indent) + 10), y, caption[m], " font-size=\"13px\"");
+                            svgWriter.addText(((lastCoordX + fullGraph.indent) + 10), y, caption[m]);
                             y += 10;
                         }
                     }
@@ -77,12 +70,12 @@ public class Visualizer {
                     int x = this.getCoordX(maxLenght, radius, (int) coordGraph[2 * l], (int) coordGraph[2 * l + 1], l, k);
                     int y = this.getCoordY(caption.length, radius, (int) coordGraph[2 * l], (int) coordGraph[2 * l + 1], l, k);
                     for (int m = 0; m < caption.length; m++) {
-                        svgWriter.addText(x, y, caption[m], " font-size=\"13px\"");
+                        svgWriter.addText(x, y, caption[m]);
                         y += 10;
                     }
                 }
             }
-        }
+    }
 
         int position = 10;
         for (int l = 0; l < sizeDotList.size(); ++l) {
@@ -90,7 +83,7 @@ public class Visualizer {
             int y = 18;
             String[] caption = vertex.caption.split(" ");
             for (int m = 0; m < caption.length; m++) {
-                svgWriter.addText(position + 10, y, caption[m], " font-size=\"13px\"");
+                svgWriter.addText(position + 10, y, caption[m]);
                 y += 10;
             }
             Integer size = sizeDotList.get(l);
@@ -98,8 +91,7 @@ public class Visualizer {
             position += distance;
         }
 
-        svgWriter.addText(10, 70, sizeDotList.size() + " free vertex",
-                " font-size=\"14px\" font-weight=\"bold\"");
+        svgWriter.addText(10, 70, sizeDotList.size() + " free vertex", 14, "font-weight=\"bold\"");
         svgWriter.writeSvg(filename, this.width, this.height);
     }
 

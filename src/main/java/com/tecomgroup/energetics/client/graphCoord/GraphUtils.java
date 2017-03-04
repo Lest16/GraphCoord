@@ -1,4 +1,4 @@
-package com.tecomgroup.energetics.client.graph;
+package com.tecomgroup.energetics.client.graphCoord;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GraphUtils {
-    public ArrayList<int[][]> readGraphs(String filename) throws Exception {
+    public static ArrayList<int[][]> readGraphs(String filename) throws Exception {
         int[][] matrix;
         ArrayList<int[][]> graphList = new ArrayList<int[][]>();
         BufferedReader fin = new BufferedReader(
@@ -35,7 +35,7 @@ public class GraphUtils {
         return graphList;
     }
 
-    public ArrayList<Integer> readDot(String filename) throws Exception {
+    public static ArrayList<Integer> readDot(String filename) throws Exception {
         BufferedReader fin = new BufferedReader(
                 new InputStreamReader(new FileInputStream("src/main/resources/data/Dot/" + filename)));
         List<String> fileContent = new ArrayList<String>();
@@ -57,7 +57,7 @@ public class GraphUtils {
         return sizeDotList;
     }
 
-    public boolean IsFullGraph(int[][] graph) throws Exception {
+    public static boolean IsFullGraph(int[][] graph) throws Exception {
         for (int i = 0; i < graph.length; i++) {
             for (int j = 0; j < graph.length; j++) {
                 if ((i != j) && (graph[i][j] != 1)) {
@@ -69,7 +69,7 @@ public class GraphUtils {
         return true;
     }
 
-    public int[][] createMatrix(int countVertex) {
+    public static int[][] createMatrix(int countVertex) {
         int[][] resultMatrix = new int[countVertex][countVertex];
         for (int i = 0; i < countVertex; i++) {
             for (int j = 0; j < countVertex; j++) {
@@ -85,7 +85,7 @@ public class GraphUtils {
         return resultMatrix;
     }
 
-    public ArrayList<int []> getSizesVertex() throws Exception {
+    public static ArrayList<int []> getSizesVertex() throws Exception {
         BufferedReader fin = new BufferedReader( new InputStreamReader(new FileInputStream("src/main/resources/sizesVertex")));
         List<String> fileContent = new ArrayList<String>() ;
         String str;
@@ -108,7 +108,7 @@ public class GraphUtils {
         return listSizes;
     }
 
-    public double[] getCoord(int[][] matr, Params params, double centX, double centY, int deviationX, int deviationY) {
+    public static double[] getCoord(int[][] matr, Params params, double centX, double centY, int deviationX, int deviationY) {
         Models models = new Models(matr, params);
         PhysSys physSys = new PhysSys(models);
         ArrayList<Double> energy = new ArrayList<Double>();
@@ -117,10 +117,5 @@ public class GraphUtils {
             energy.add(models.SpringChargeEnergy(physSys.r));
         }
         return physSys.centralize(centX, centY, deviationX, deviationY);
-    }
-
-    public void getCoordFullGraph()
-    {
-
     }
 }

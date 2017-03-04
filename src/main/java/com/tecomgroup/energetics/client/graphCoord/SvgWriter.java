@@ -1,4 +1,4 @@
-package com.tecomgroup.energetics.client.graph;
+package com.tecomgroup.energetics.client.graphCoord;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,9 +19,22 @@ public class SvgWriter {
                 "r=\"" + r + "\" style=\"fill:black; fill-opacity:0.4; stroke-width:4px;\" /> \n");
     }
 
+    public void addText(int x, int y, String caption) {
+       this.addText(x, y, caption, "");
+    }
+
     public void addText(int x, int y, String caption, String params) {
         svgBuilder.add("<text  x=\"" + x + "\" y=\"" + y +
-                "\" " + params + "> " + caption + " </text> \n");
+                "\" font-size=\"13px\" "+ params + "> " + caption + " </text> \n");
+    }
+
+    public void addText(int x, int y, String caption, int fontSize) {
+        this.addText(x, y, caption, fontSize, "");
+    }
+
+    public void addText(int x, int y, String caption, int fontSize, String params){
+        svgBuilder.add("<text  x=\"" + x + "\" y=\"" + y +
+                "\" font-size=\"" + fontSize + "px\" "+ params + "> " + caption + " </text> \n");
     }
 
     public void writeSvg(String filename, int width, int height) {

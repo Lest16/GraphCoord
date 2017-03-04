@@ -1,4 +1,4 @@
-package com.tecomgroup.energetics.client.graph;
+package com.tecomgroup.energetics.client.graphCoord;
 
 import java.io.FileInputStream;
 import java.io.IOException;

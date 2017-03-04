@@ -1,4 +1,4 @@
-package com.tecomgroup.energetics.client.graph;
+package com.tecomgroup.energetics.client.graphCoord;
 
 public class Vertex {
     public final int size;

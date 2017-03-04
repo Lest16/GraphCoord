@@ -1,4 +1,4 @@
-package com.tecomgroup.energetics.client.graph;
+package com.tecomgroup.energetics.client.graphCoord;
 
 public class PhysSys {
     private Models models;
