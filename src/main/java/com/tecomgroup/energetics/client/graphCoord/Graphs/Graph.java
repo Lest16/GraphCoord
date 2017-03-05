@@ -1,12 +1,11 @@
 package com.tecomgroup.energetics.client.graphCoord.Graphs;
 
-import com.tecomgroup.energetics.client.graphCoord.Graphs.IGraph;
 import com.tecomgroup.energetics.client.graphCoord.Rectangle;
 import com.tecomgroup.energetics.client.graphCoord.Visualizer;
 
 public class Graph implements IGraph{
-    private final int[][] adjacencyMatrix;
-    private final int[] coords;
+    public final int[][] adjacencyMatrix;
+    public int[] coords;
 
     public Graph(int[][] adjacencyMatrix, int[] coords) {
 
@@ -16,7 +15,7 @@ public class Graph implements IGraph{
 
 
     public void Visualize(Visualizer visualizer) {
-
+        visualizer.DrawGraph(this);
     }
 
     public Rectangle GetDelineateRectangle() {
@@ -40,6 +39,13 @@ public class Graph implements IGraph{
         }
 
         return new Rectangle(minX, minY, maxX, maxY);
+    }
+
+    public void Move(int x, int y) {
+        for (int i = 0; i < coords.length; i++){
+            this.coords[2 * i] = this.getX(i) + x;
+            this.coords[2 * i + 1] = this.getY(i) + y;
+        }
     }
 
     public int getX(int i){

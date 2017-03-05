@@ -4,9 +4,9 @@ import com.tecomgroup.energetics.client.graphCoord.Rectangle;
 import com.tecomgroup.energetics.client.graphCoord.Visualizer;
 
 public interface IGraph {
-    public void Visualize(Visualizer visualizer);
+    void Visualize(Visualizer visualizer);
 
-    public Rectangle GetDelineateRectangle();
+    Rectangle GetDelineateRectangle();
 
-    public void Move(int x, int y);
+    void Move(int x, int y);
 }

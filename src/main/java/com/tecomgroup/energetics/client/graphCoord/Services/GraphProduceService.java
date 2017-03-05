@@ -53,6 +53,6 @@ public class GraphProduceService {
         int leftX = coordsInt[0] - fullGraphIndent * adjacencyMatrix.length / 2;
         int rightX = leftX + (fullGraphIndent * adjacencyMatrix.length);
         int basicY = coordsInt[1];
-        return new FullGraph(leftX, rightX, basicY, fullGraphIndent);
+        return new FullGraph(leftX, rightX, basicY, fullGraphIndent, adjacencyMatrix.length - 1);
     }
 }

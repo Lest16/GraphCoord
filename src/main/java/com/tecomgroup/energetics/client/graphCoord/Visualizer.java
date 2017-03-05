@@ -1,83 +1,86 @@
 package com.tecomgroup.energetics.client.graphCoord;
 
 import com.tecomgroup.energetics.client.graphCoord.Graphs.FullGraph;
+import com.tecomgroup.energetics.client.graphCoord.Graphs.Graph;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Visualizer {
     private final int width;
     private final int height;
+    private SvgWriter svgWriter;
 
-    public Visualizer(int width, int height) {
+    public Visualizer(int width, int height, SvgWriter svgWriter) {
         this.width = width;
         this.height = height;
+        this.svgWriter = svgWriter;
     }
 
-    public void Draw(final ArrayList<Integer> sizeDotList, final int distance,
-                     final ArrayList<ArrayList<Vertex>> allVertices, String filename) throws Exception {
-        //GraphUtils graphUtils = new GraphUtils();
-        SvgWriter svgWriter = new SvgWriter();
-        int countFullGraph = 0;
-        for (int k = 0; k < coordList.size(); k++) {
-            double[] coordGraph = coordList.get(k);
-            int[][] adjacencyMatrix = adjacencyMatrixList.get(k);
-            if (GraphUtils.IsFullGraph(adjacencyMatrix)) {
-                FullGraph fullGraph = this.fullGraphs.get(countFullGraph);
-                svgWriter.addLine(fullGraph.leftX, fullGraph.basicY, fullGraph.rightX, fullGraph.basicY);
-                int lastCoordX = fullGraph.leftX;
-                for (int i = 0; i < adjacencyMatrix.length - 1; ++i) {
-                    Vertex vertex = new Vertex(9);
-                    if (i % 2 == 0) {
-                        svgWriter.addLine(lastCoordX + fullGraph.indent, fullGraph.basicY, lastCoordX + fullGraph.indent,
-                                (fullGraph.basicY + fullGraph.indent) - vertex.size);
-                        svgWriter.addCircle(lastCoordX + fullGraph.indent, fullGraph.basicY + fullGraph.indent, vertex.size);
-                        int y = fullGraph.basicY + fullGraph.indent;
-                        String[] caption = vertex.caption.split(" ");
-                        for (int m = 0; m < caption.length; m++) {
-                            svgWriter.addText(((lastCoordX + fullGraph.indent) + 10), y, caption[m]);
-                            y += 10;
-                        }
-                    } else {
-                        svgWriter.addLine(lastCoordX + fullGraph.indent, fullGraph.basicY, lastCoordX + fullGraph.indent,
-                                (fullGraph.basicY - fullGraph.indent) + vertex.size);
-                        svgWriter.addCircle(lastCoordX + fullGraph.indent, fullGraph.basicY - fullGraph.indent, vertex.size);
-                        int y = fullGraph.basicY - fullGraph.indent;
-                        String[] caption = vertex.caption.split(" ");
-                        for (int m = 0; m < caption.length; m++) {
-                            svgWriter.addText(((lastCoordX + fullGraph.indent) + 10), y, caption[m]);
-                            y += 10;
-                        }
-                    }
+    public void WriteSvg( String filename)  {
+        svgWriter.writeSvg(filename, this.width, this.height);
+    }
 
-                    lastCoordX += fullGraph.indent;
+    public void DrawFullGraph(FullGraph fullGraph){
+        svgWriter.addLine(fullGraph.leftX, fullGraph.basicY, fullGraph.rightX, fullGraph.basicY);
+        int lastCoordX = fullGraph.leftX;
+        for (int i = 0; i < fullGraph.countVertex; ++i) {
+            Vertex vertex = new Vertex(9);
+            if (i % 2 == 0) {
+                svgWriter.addLine(lastCoordX + fullGraph.indent, fullGraph.basicY, lastCoordX + fullGraph.indent,
+                        (fullGraph.basicY + fullGraph.indent) - vertex.size);
+                svgWriter.addCircle(lastCoordX + fullGraph.indent, fullGraph.basicY + fullGraph.indent, vertex.size);
+                int y = fullGraph.basicY + fullGraph.indent;
+                String[] caption = vertex.caption.split(" ");
+                for (int m = 0; m < caption.length; m++) {
+                    svgWriter.addText(((lastCoordX + fullGraph.indent) + 10), y, caption[m]);
+                    y += 10;
                 }
-
-                countFullGraph++;
             } else {
-                for (int i = 0; i < adjacencyMatrix.length; ++i)
-                    for (int j = i + 1; j < adjacencyMatrix.length; ++j)
-                        if (adjacencyMatrix[i][j] == 1) {
-                            svgWriter.addLine((int) coordGraph[2 * i], (int) coordGraph[2 * i + 1],
-                                    (int) coordGraph[2 * j], (int) coordGraph[2 * j + 1]);
-                        }
-
-                for (int l = 0; l < adjacencyMatrix.length; ++l) {
-                    Vertex vertex = new Vertex(9);
-                    svgWriter.addCircle((int) coordGraph[2 * l], (int) coordGraph[2 * l + 1], vertex.size);
-                    String[] caption = vertex.caption.split(" ");
-                    this.maxLenght = GetMaxLength(caption);
-                    this.radius = GetRadius(caption, maxLenght);
-                    int x = this.getCoordX(maxLenght, radius, (int) coordGraph[2 * l], (int) coordGraph[2 * l + 1], l, k);
-                    int y = this.getCoordY(caption.length, radius, (int) coordGraph[2 * l], (int) coordGraph[2 * l + 1], l, k);
-                    for (int m = 0; m < caption.length; m++) {
-                        svgWriter.addText(x, y, caption[m]);
-                        y += 10;
-                    }
+                svgWriter.addLine(lastCoordX + fullGraph.indent, fullGraph.basicY, lastCoordX + fullGraph.indent,
+                        (fullGraph.basicY - fullGraph.indent) + vertex.size);
+                svgWriter.addCircle(lastCoordX + fullGraph.indent, fullGraph.basicY - fullGraph.indent, vertex.size);
+                int y = fullGraph.basicY - fullGraph.indent;
+                String[] caption = vertex.caption.split(" ");
+                for (int m = 0; m < caption.length; m++) {
+                    svgWriter.addText(((lastCoordX + fullGraph.indent) + 10), y, caption[m]);
+                    y += 10;
                 }
             }
+
+            lastCoordX += fullGraph.indent;
+        }
     }
 
+    public void DrawGraph(Graph graph){
+        for (int i = 0; i < graph.adjacencyMatrix.length; ++i)
+            for (int j = i + 1; j < graph.adjacencyMatrix.length; ++j)
+                if (graph.adjacencyMatrix[i][j] == 1) {
+                    svgWriter.addLine(graph.getX(i), graph.getY(i),
+                            graph.getX(j), graph.getY(j));
+                }
+
+        for (int i = 0; i < graph.adjacencyMatrix.length; ++i) {
+            Vertex vertex = new Vertex(9);
+            svgWriter.addCircle(graph.getX(i), graph.getY(i), vertex.size);
+            String[] caption = vertex.caption.split(" ");
+            int maxLength = GetMaxLength(caption);
+            int radius = GetRadius(caption, maxLength);
+            int x = this.getCoordX(maxLength, radius, graph.getX(i), graph.getY(i), i, graph.adjacencyMatrix, graph.coords);
+            int y = this.getCoordY(caption.length, radius, graph.getX(i), graph.getY(i), i, graph.adjacencyMatrix, graph.coords);
+            for (int m = 0; m < caption.length; m++) {
+                svgWriter.addText(x, y, caption[m]);
+                y += 10;
+            }
+        }
+
+    }
+
+    public void DrawFreeDots(List<Integer> sizeDotList){
         int position = 10;
+        int distance = 0;
+        if (sizeDotList.size() != 0) {
+            distance = this.width / sizeDotList.size();
+        }
         for (int l = 0; l < sizeDotList.size(); ++l) {
             Vertex vertex = new Vertex(9);
             int y = 18;
@@ -92,51 +95,38 @@ public class Visualizer {
         }
 
         svgWriter.addText(10, 70, sizeDotList.size() + " free vertex", 14, "font-weight=\"bold\"");
-        svgWriter.writeSvg(filename, this.width, this.height);
+
     }
 
-    private int getCoordX(int maxLenght, int radius, int x, int y, int idxCurrentVertex, int idxCurrentMatrix) {
+    private int getCoordX(int maxLenght, int radius, int x, int y, int idxCurrentVertex, int[][] adjacencyMatrix, int[] coords) {
         int centralVertex = 0;
         int count = 0;
-        for (int j = 0; j < adjacencyMatrixList.get(idxCurrentMatrix).length; ++j)
-            if (adjacencyMatrixList.get(idxCurrentMatrix)[idxCurrentVertex][j] == 1) {
+        for (int j = 0; j < adjacencyMatrix.length; ++j)
+            if (adjacencyMatrix[idxCurrentVertex][j] == 1) {
                 centralVertex = j;
                 count++;
             }
 
         if (count == 1) {
-            if (x > coordList.get(idxCurrentMatrix)[2 * centralVertex]) {
+            if (x > coords[2 * centralVertex]) {
                 return x + 10;
             } else {
                 return x - (maxLenght * 9);
             }
         }
 
-
-        ArrayList<Integer> listCoordX = new ArrayList<Integer>();
-        ArrayList<Integer> listCoordY = new ArrayList<Integer>();
         boolean isLeft = true;
         boolean isRight = true;
-        for (int i = 0; i < coordList.size(); i++) {
-            for (int j = 0; j < adjacencyMatrixList.get(i).length; j++) {
-                double a = Math.abs(coordList.get(i)[2 * j] - x);
-                double b = Math.abs(coordList.get(i)[2 * j + 1] - y);
-                int c = (int) coordList.get(i)[2 * j];
-                int d = (int) coordList.get(i)[2 * j + 1];
-                if ((a <= radius) && (b <= radius) && (c != x) && (d != y)) {
-                    listCoordX.add((int) coordList.get(i)[2 * j]);
-                    listCoordY.add((int) coordList.get(i)[2 * j + 1]);
-                }
 
-                if (x < (int) coordList.get(i)[2 * j]) {
+            for (int j = 0; j < adjacencyMatrix.length; j++) {
+                if (x < coords[2 * j]) {
                     isLeft = false;
                 }
 
-                if (x > (int) coordList.get(i)[2 * j]) {
+                if (x > coords[2 * j]) {
                     isRight = false;
                 }
             }
-        }
 
         if (isLeft) {
             return x + 10;
@@ -146,70 +136,39 @@ public class Visualizer {
             return x - (maxLenght * 9);
         }
 
-        for (int i = 0; i < listCoordX.size(); i++) {
-            for (int j = 0; j < listCoordX.size(); j++) {
-                if (((listCoordX.get(i) < x) && (listCoordX.get(j) > x)) || ((listCoordX.get(i) > x) && (listCoordX.get(j) < x))) {
-                    int distance = Math.abs(listCoordX.get(i) - listCoordX.get(j));
-                    if (distance > (maxLenght * 9)) {
-                        int rangeX = (distance - (maxLenght * 9)) / 2;
-                        int leftCoord = 0;
-                        if (listCoordX.get(i) < listCoordX.get(j)) {
-                            leftCoord = listCoordX.get(i);
-                        } else {
-                            leftCoord = listCoordX.get(j);
-                        }
-
-                        return leftCoord + rangeX;
-
-                    }
-                }
-            }
-        }
-
         return x - ((maxLenght * 9) / 2);
     }
 
-    private int getCoordY(int maxLenght, int radius, int x, int y, int idxCurrentVertex, int idxCurrentMatrix) {
+    private int getCoordY(int maxLenght, int radius, int x, int y, int idxCurrentVertex, int[][] adjacencyMatrix, int[] coords) {
         int count = 0;
         int centralVertex = 0;
-        for (int j = 0; j < adjacencyMatrixList.get(idxCurrentMatrix).length; ++j)
-            if (adjacencyMatrixList.get(idxCurrentMatrix)[idxCurrentVertex][j] == 1) {
+        for (int j = 0; j < adjacencyMatrix.length; ++j)
+            if (adjacencyMatrix[idxCurrentVertex][j] == 1) {
                 centralVertex = j;
                 count++;
             }
 
         if (count == 1) {
-            if (y > coordList.get(idxCurrentMatrix)[2 * centralVertex + 1]) {
+            if (y > coords[2 * centralVertex + 1]) {
                 return y + 15;
             } else {
                 return y - (maxLenght * 7);
             }
         }
 
-        ArrayList<Integer> listCoordX = new ArrayList<Integer>();
-        ArrayList<Integer> listCoordY = new ArrayList<Integer>();
         boolean isTop = true;
         boolean isBottom = true;
-        for (int i = 0; i < coordList.size(); i++) {
-            for (int j = 0; j < adjacencyMatrixList.get(i).length; j++) {
-                double a = Math.abs(coordList.get(i)[2 * j] - x);
-                double b = Math.abs(coordList.get(i)[2 * j + 1] - y);
-                int c = (int) coordList.get(i)[2 * j];
-                int d = (int) coordList.get(i)[2 * j + 1];
-                if ((a <= radius) && (b <= radius) && (c != x) && (d != y)) {
-                    listCoordX.add((int) coordList.get(i)[2 * j]);
-                    listCoordY.add((int) coordList.get(i)[2 * j + 1]);
-                }
 
-                if (y < (int) coordList.get(i)[2 * j + 1]) {
+            for (int j = 0; j < adjacencyMatrix.length; j++) {
+
+                if (y < coords[2 * j + 1]) {
                     isTop = false;
                 }
 
-                if (y > (int) coordList.get(i)[2 * j + 1]) {
+                if (y > coords[2 * j + 1]) {
                     isBottom = false;
                 }
             }
-        }
 
         if (isTop) {
             return y + 20;
@@ -217,18 +176,6 @@ public class Visualizer {
 
         if (isBottom) {
             return y - (maxLenght * 7);
-        }
-
-        for (int i = 0; i < listCoordY.size(); i++) {
-            if ((listCoordX.get(i) > x) && (listCoordX.get(i) < (x + (maxLenght * 7)))) {
-                if (listCoordY.get(i) > (y + (maxLenght * 7))) {
-                    return y + 20;
-                } else if ((listCoordY.get(i) < (y - (maxLenght * 7)))) {
-                    return y - (maxLenght * 7);
-                }
-            } else {
-                return y + 20;
-            }
         }
 
         return y + 20;

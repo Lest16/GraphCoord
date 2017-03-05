@@ -2,7 +2,6 @@ package com.tecomgroup.energetics.client.graphCoord.run;
 
 import com.tecomgroup.energetics.client.graphCoord.*;
 import com.tecomgroup.energetics.client.graphCoord.Graphs.IGraph;
-import com.tecomgroup.energetics.client.graphCoord.Services.CalculateCoordService;
 import com.tecomgroup.energetics.client.graphCoord.Services.GraphProduceService;
 import com.tecomgroup.energetics.client.graphCoord.Services.PackagingService;
 
@@ -36,19 +35,18 @@ public class Main {
             adjacencyMatrixList.addAll(graphList);
             GraphProduceService graphProduceService = new GraphProduceService(params, indent);
             List<IGraph> graphs = graphProduceService.GetCoordGraphs(adjacencyMatrixList);
-            //coordList = calculateCoordService.CalculateCoord(indent);
-            //calculateCoordService.GetCoordFullGraph(coordList);
             PackagingService packagingService = new PackagingService(params);
             packagingService.PackageGraphs(graphs);
-            Visualizer visualizer = new Visualizer(params.width, params.height,
-                    adjacencyMatrixList, coordList, calculateCoordService.fullGraphs);
-            int distance = 0;
-            if (sizeDotList.size() != 0) {
-                distance = params.width / sizeDotList.size();
+            SvgWriter svgWriter = new SvgWriter();
+            Visualizer visualizer = new Visualizer(params.width, params.height, svgWriter);
+            for (IGraph graph: graphs) {
+                graph.Visualize(visualizer);
             }
+            visualizer.DrawFreeDots(sizeDotList);
+            visualizer.WriteSvg(String.valueOf(k));
 
-            visualizer.Draw(sizeDotList, distance, allVertices, String.valueOf(k));
-            System.out.println(k);
+            //visualizer.Draw(sizeDotList, distance, allVertices, String.valueOf(k));
+            System.out.println(String.valueOf(k));
         }
 
         long finish = System.currentTimeMillis();
