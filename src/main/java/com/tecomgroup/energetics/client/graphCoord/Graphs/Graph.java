@@ -42,7 +42,7 @@ public class Graph implements IGraph{
     }
 
     public void Move(int x, int y) {
-        for (int i = 0; i < coords.length; i++){
+        for (int i = 0; i < coords.length / 2; i++){
             this.coords[2 * i] = this.getX(i) + x;
             this.coords[2 * i + 1] = this.getY(i) + y;
         }

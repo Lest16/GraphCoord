@@ -35,11 +35,11 @@ public class Main {
             adjacencyMatrixList.addAll(graphList);
             GraphProduceService graphProduceService = new GraphProduceService(params, indent);
             List<IGraph> graphs = graphProduceService.GetCoordGraphs(adjacencyMatrixList);
-            PackagingService packagingService = new PackagingService(params);
-            packagingService.PackageGraphs(graphs);
+            PackagingService packagingService = new PackagingService(params, indent);
+            List<IGraph> packedGraphs = packagingService.PackageGraphs(graphs);
             SvgWriter svgWriter = new SvgWriter();
             Visualizer visualizer = new Visualizer(params.width, params.height, svgWriter);
-            for (IGraph graph: graphs) {
+            for (IGraph graph: packedGraphs) {
                 graph.Visualize(visualizer);
             }
             visualizer.DrawFreeDots(sizeDotList);

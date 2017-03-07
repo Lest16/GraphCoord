@@ -29,4 +29,15 @@ public class Vertex {
 
         return randomWord;
     }
+
+    public int GetMaxLength(String[] caption) {
+        int maxLenght = caption[0].length();
+        for (int i = 1; i < caption.length; i++) {
+            if (caption[i].length() > maxLenght) {
+                maxLenght = caption[i].length();
+            }
+        }
+
+        return maxLenght;
+    }
 }
