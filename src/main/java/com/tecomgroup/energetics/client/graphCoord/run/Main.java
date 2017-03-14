@@ -44,8 +44,6 @@ public class Main {
             }
             visualizer.DrawFreeDots(sizeDotList);
             visualizer.WriteSvg(String.valueOf(k));
-
-            //visualizer.Draw(sizeDotList, distance, allVertices, String.valueOf(k));
             System.out.println(String.valueOf(k));
         }
 

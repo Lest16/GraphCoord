@@ -182,7 +182,6 @@ public class Visualizer {
         return y + 20;
     }
 
-
 }
 
 
