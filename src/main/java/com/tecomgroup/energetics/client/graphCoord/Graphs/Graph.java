@@ -6,6 +6,7 @@ import com.tecomgroup.energetics.client.graphCoord.Visualizer;
 public class Graph implements IGraph{
     public final int[][] adjacencyMatrix;
     public int[] coords;
+    private Rectangle delineateRectangle;
 
     public Graph(int[][] adjacencyMatrix, int[] coords) {
 
@@ -17,8 +18,16 @@ public class Graph implements IGraph{
     public void Visualize(Visualizer visualizer) {
         visualizer.DrawGraph(this);
     }
+    
+    public Rectangle GetDelineateRectangle(){
+        if(this.delineateRectangle == null){
+            this.delineateRectangle = this.CalculateDelineateRectangle();
+        }
+        
+        return this.delineateRectangle;
+    }
 
-    public Rectangle GetDelineateRectangle() {
+    private Rectangle CalculateDelineateRectangle() {
         int minX = this.coords[0];
         int minY = this.coords[1];
         int maxX = this.coords[0];
