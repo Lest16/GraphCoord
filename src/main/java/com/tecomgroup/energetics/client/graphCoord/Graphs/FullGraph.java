@@ -9,6 +9,7 @@ public class FullGraph implements IGraph{
     public int basicY;
     public final int indent;
     public final int countVertex;
+    private Rectangle delineateRectangle;
 
     public FullGraph(int leftX, int rightX, int basicY, int indent, int countVertex)
     {
@@ -22,8 +23,16 @@ public class FullGraph implements IGraph{
     public void Visualize(Visualizer visualizer) {
         visualizer.DrawFullGraph(this);
     }
+    
+    public Rectangle GetDelineateRectangle(){
+        if(this.delineateRectangle == null){
+            this.delineateRectangle = this.CalculateDelineateRectangle();
+        }
+        
+        return this.delineateRectangle;
+    }
 
-    public Rectangle GetDelineateRectangle() {
+    private Rectangle CalculateDelineateRectangle() {
         return new Rectangle(this.leftX, this.basicY - this.indent,
                 this.rightX, this.basicY + this.indent);
     }
