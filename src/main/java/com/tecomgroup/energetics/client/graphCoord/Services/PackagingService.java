@@ -30,14 +30,14 @@ public class PackagingService {
                 int i = 0;
                 while (i != graphs.size() ){
                     Rectangle currentRect = graphs.get(i).GetDelineateRectangle();
-                    if (availableWidth > currentRect.x2 - currentRect.x1){
+                    if (availableWidth > currentRect.GetWidth()){
                         graphs.get(i).Move(indentX + 30 - currentRect.x1,
                                 lastIndentY - currentRect.y1);
-                        availableWidth -= (currentRect.x2 - currentRect.x1) + 100;
-                        if (lineHeight <= currentRect.y2 - currentRect.y1){
-                            lineHeight = currentRect.y2 - currentRect.y1;
+                        availableWidth -= currentRect.GetWidth() + 100;
+                        if (lineHeight <= currentRect.GetHeight()){
+                            lineHeight = currentRect.GetHeight();
                         }
-                        indentX += currentRect.x2 - currentRect.x1 + 100;
+                        indentX += currentRect.GetWidth() + 100;
                         packedGraphs.add(graphs.get(i));
                         graphs.remove(i);
                         continue;
@@ -61,10 +61,10 @@ public class PackagingService {
         for (int i = 0; i < graphs.size(); i++) {
             int idxMostWideRectangle = i;
             boolean IsSwap = false;
-            int maxWidth = graphs.get(i).GetDelineateRectangle().x2 - graphs.get(i).GetDelineateRectangle().x1;
+            int maxWidth = graphs.get(i).GetDelineateRectangle().GetWidth();
             for (int j = i + 1; j < graphs.size(); j++) {
-                if ((graphs.get(j).GetDelineateRectangle().x2 - graphs.get(j).GetDelineateRectangle().x1) > maxWidth) {
-                    maxWidth = graphs.get(j).GetDelineateRectangle().x2 - graphs.get(j).GetDelineateRectangle().x1;
+                if (graphs.get(j).GetDelineateRectangle().GetWidth() > maxWidth) {
+                    maxWidth = graphs.get(j).GetDelineateRectangle().GetWidth();
                     idxMostWideRectangle = j;
                     IsSwap = true;
                 }

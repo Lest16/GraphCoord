@@ -13,4 +13,12 @@ public class Rectangle {
         this.x2 = x2;
         this.y2 = y2;
     }
+
+    public int GetWidth(){
+        return this.x2 - this.x1;
+    }
+
+    public int GetHeight(){
+        return this.y2 - this.y1;
+    }
 }
