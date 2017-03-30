@@ -3,10 +3,13 @@ package com.tecomgroup.energetics.client.graphCoord.Graphs;
 import com.tecomgroup.energetics.client.graphCoord.Rectangle;
 import com.tecomgroup.energetics.client.graphCoord.Visualizer;
 
+import java.util.ArrayList;
+
 public class Graph implements IGraph{
     public final int[][] adjacencyMatrix;
     public int[] coords;
     private Rectangle delineateRectangle;
+    public ArrayList<Integer> distinctVertex;
 
     public Graph(int[][] adjacencyMatrix, int[] coords) {
 

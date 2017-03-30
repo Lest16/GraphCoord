@@ -1,10 +1,13 @@
 package com.tecomgroup.energetics.client.graphCoord;
 
+import com.tecomgroup.energetics.client.graphCoord.Graphs.Edge;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GraphUtils {
     public static ArrayList<int[][]> readGraphs(String filename) throws Exception {
@@ -80,6 +83,30 @@ public class GraphUtils {
                     resultMatrix[i][j] = 1;
                 }
             }
+        }
+
+        return resultMatrix;
+    }
+
+    public static int[][] createMatrix(ArrayList<Edge> edges) {
+        ArrayList<Integer> distinctVertex = new ArrayList<Integer>();
+        for (Edge edge: edges) {
+            if (!distinctVertex.contains(edge.firstVertex)) {
+                distinctVertex.add(edge.firstVertex);
+            }
+
+            if (!distinctVertex.contains(edge.secondVertex)) {
+                distinctVertex.add(edge.secondVertex);
+            }
+        }
+        int[][] resultMatrix = new int[distinctVertex.size()][distinctVertex.size()];
+        for (int i = 0; i < distinctVertex.size(); i++) {
+            for (int j = 0; j < distinctVertex.size(); j++) {
+                resultMatrix[i][j] = 0;
+            }
+        }
+        for (int i = 0; i < edges.size(); i++){
+            resultMatrix[distinctVertex.indexOf(edges.get(i).firstVertex)][distinctVertex.indexOf(edges.get(i).secondVertex)] = 1;
         }
 
         return resultMatrix;

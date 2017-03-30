@@ -12,9 +12,8 @@ public class Main {
     public static void main(String[] args) throws Exception {
         long start = System.currentTimeMillis();
         DbReader dbReader = new DbReader();
-        dbReader.GetGraphs();
+        GraphUtils.createMatrix(dbReader.GetGraphs());
         Params params = Params.createFromFile("src/main/resources/config");
-
         //ArrayList<int[][]> graphList = GraphUtils.readGraphs(String.valueOf(k));
         ArrayList<int[][]> graphList = new ArrayList<int[][]>();
         //ArrayList<int[]> sizesVertex = GraphUtils.getSizesVertex();
