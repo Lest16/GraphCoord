@@ -72,23 +72,8 @@ public class GraphUtils {
         return true;
     }
 
-    public static int[][] createMatrix(int countVertex) {
-        int[][] resultMatrix = new int[countVertex][countVertex];
-        for (int i = 0; i < countVertex; i++) {
-            for (int j = 0; j < countVertex; j++) {
-                if (i == j) {
-                    resultMatrix[i][j] = 0;
-                }
-                else {
-                    resultMatrix[i][j] = 1;
-                }
-            }
-        }
-
-        return resultMatrix;
-    }
-
-    public static int[][] createMatrix(ArrayList<Edge> edges) {
+    public static ArrayList<Integer> GetDistinctVertex(ArrayList<Edge> edges)
+    {
         ArrayList<Integer> distinctVertex = new ArrayList<Integer>();
         for (Edge edge: edges) {
             if (!distinctVertex.contains(edge.firstVertex)) {
@@ -99,6 +84,10 @@ public class GraphUtils {
                 distinctVertex.add(edge.secondVertex);
             }
         }
+        return distinctVertex;
+    }
+
+    public static int[][] createAdjacencyMatrix(ArrayList<Edge> edges, ArrayList<Integer> distinctVertex) {
         int[][] resultMatrix = new int[distinctVertex.size()][distinctVertex.size()];
         for (int i = 0; i < distinctVertex.size(); i++) {
             for (int j = 0; j < distinctVertex.size(); j++) {
@@ -107,6 +96,7 @@ public class GraphUtils {
         }
         for (int i = 0; i < edges.size(); i++){
             resultMatrix[distinctVertex.indexOf(edges.get(i).firstVertex)][distinctVertex.indexOf(edges.get(i).secondVertex)] = 1;
+            resultMatrix[distinctVertex.indexOf(edges.get(i).secondVertex)][distinctVertex.indexOf(edges.get(i).firstVertex)] = 1;
         }
 
         return resultMatrix;

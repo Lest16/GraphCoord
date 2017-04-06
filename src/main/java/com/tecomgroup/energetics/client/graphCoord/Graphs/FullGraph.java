@@ -3,6 +3,8 @@ package com.tecomgroup.energetics.client.graphCoord.Graphs;
 import com.tecomgroup.energetics.client.graphCoord.Rectangle;
 import com.tecomgroup.energetics.client.graphCoord.Visualizer;
 
+import java.util.ArrayList;
+
 public class FullGraph implements IGraph{
     public int leftX;
     public int rightX;
@@ -10,6 +12,17 @@ public class FullGraph implements IGraph{
     public final int indent;
     public final int countVertex;
     private Rectangle delineateRectangle;
+    public ArrayList<Integer> distinctVertex;
+
+    public FullGraph(int leftX, int rightX, int basicY, int indent, int countVertex, ArrayList<Integer> distinctVertex)
+    {
+        this.leftX = leftX;
+        this.rightX = rightX;
+        this.basicY = basicY;
+        this.indent = indent;
+        this.countVertex = countVertex;
+        this.distinctVertex = distinctVertex;
+    }
 
     public FullGraph(int leftX, int rightX, int basicY, int indent, int countVertex)
     {

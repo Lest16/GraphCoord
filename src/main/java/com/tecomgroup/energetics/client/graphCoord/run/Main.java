@@ -12,7 +12,6 @@ public class Main {
     public static void main(String[] args) throws Exception {
         long start = System.currentTimeMillis();
         DbReader dbReader = new DbReader();
-        GraphUtils.createMatrix(dbReader.GetGraphs());
         Params params = Params.createFromFile("src/main/resources/config");
         //ArrayList<int[][]> graphList = GraphUtils.readGraphs(String.valueOf(k));
         ArrayList<int[][]> graphList = new ArrayList<int[][]>();
@@ -38,7 +37,7 @@ public class Main {
         ArrayList<int[][]> adjacencyMatrixList = new ArrayList<int[][]>();
         adjacencyMatrixList.addAll(graphList);
         GraphProduceService graphProduceService = new GraphProduceService(params, indent);
-        List<IGraph> graphs = graphProduceService.GetCoordGraphs(adjacencyMatrixList);
+        List<IGraph> graphs = graphProduceService.GetCoordGraphs(dbReader.ReadEdgesList());
         PackagingService packagingService = new PackagingService(params, indent);
         List<IGraph> packedGraphs = packagingService.PackageGraphs(graphs);
         SvgWriter svgWriter = new SvgWriter();
@@ -47,7 +46,7 @@ public class Main {
             graph.Visualize(visualizer);
         }
         visualizer.DrawFreeDots(sizeDotList);
-        //visualizer.WriteSvg(String.valueOf(k));
+        visualizer.WriteSvg("result");
         //System.out.println(String.valueOf(k));
 
 

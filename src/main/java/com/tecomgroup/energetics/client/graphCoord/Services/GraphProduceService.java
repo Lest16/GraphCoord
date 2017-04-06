@@ -1,5 +1,6 @@
 package com.tecomgroup.energetics.client.graphCoord.Services;
 
+import com.tecomgroup.energetics.client.graphCoord.Graphs.Edge;
 import com.tecomgroup.energetics.client.graphCoord.Graphs.FullGraph;
 import com.tecomgroup.energetics.client.graphCoord.Graphs.Graph;
 import com.tecomgroup.energetics.client.graphCoord.GraphUtils;
@@ -32,10 +33,34 @@ public class GraphProduceService {
 
     }
 
-    public ArrayList<IGraph> GetCoordGraphs(ArrayList<int[][]> adjacencyMatrixList) throws Exception {
+    public IGraph GetCoordGraph(ArrayList<Edge> edges, int countGraphs) throws Exception {
+        ArrayList<Integer> distinctVertex = GraphUtils.GetDistinctVertex(edges);
+        int[][] adjacencyMatrix = GraphUtils.createAdjacencyMatrix(edges, distinctVertex);
+        params.meanSpringLength = ((params.height + params.width - indent)) /
+                (adjacencyMatrix.length * countGraphs);
+        double[] coordsDouble = GraphUtils.getCoord(adjacencyMatrix, params, params.width / 2,
+                (params.height + indent) / 2, 0, 0);
+        int[] coordsInt = this.CastArrayToInt(coordsDouble);
+        if (GraphUtils.IsFullGraph(adjacencyMatrix)) {
+            return CreateFullGraph(coordsInt, countGraphs, adjacencyMatrix, distinctVertex);
+        } else {
+            return new Graph(adjacencyMatrix, coordsInt, distinctVertex);
+        }
+
+    }
+
+    /*public ArrayList<IGraph> GetCoordGraphs(ArrayList<int[][]> adjacencyMatrixList) throws Exception {
         ArrayList<IGraph> graphList = new ArrayList<IGraph>();
         for (int i = 0; i < adjacencyMatrixList.size(); i++) {
             graphList.add(this.GetCoordGraph(adjacencyMatrixList.get(i), adjacencyMatrixList.size()));
+        }
+        return graphList;
+    }*/
+
+    public ArrayList<IGraph> GetCoordGraphs(ArrayList<ArrayList<Edge>> edgesList) throws Exception {
+        ArrayList<IGraph> graphList = new ArrayList<IGraph>();
+        for (int i = 0; i < edgesList.size(); i++) {
+            graphList.add(this.GetCoordGraph(edgesList.get(i), edgesList.size()));
         }
         return graphList;
     }
@@ -54,5 +79,13 @@ public class GraphProduceService {
         int rightX = leftX + (fullGraphIndent * adjacencyMatrix.length);
         int basicY = coordsInt[1];
         return new FullGraph(leftX, rightX, basicY, fullGraphIndent, adjacencyMatrix.length - 1);
+    }
+
+    private FullGraph CreateFullGraph(int[] coordsInt, int countGraphs, int[][] adjacencyMatrix, ArrayList<Integer> distinctVertex){
+        int fullGraphIndent = this.params.width / (coordsInt.length * countGraphs) + coordsInt.length;
+        int leftX = coordsInt[0] - fullGraphIndent * adjacencyMatrix.length / 2;
+        int rightX = leftX + (fullGraphIndent * adjacencyMatrix.length);
+        int basicY = coordsInt[1];
+        return new FullGraph(leftX, rightX, basicY, fullGraphIndent, adjacencyMatrix.length - 1, distinctVertex);
     }
 }

@@ -11,12 +11,18 @@ public class Graph implements IGraph{
     private Rectangle delineateRectangle;
     public ArrayList<Integer> distinctVertex;
 
+    public Graph(int[][] adjacencyMatrix, int[] coords, ArrayList<Integer> distinctVertex) {
+
+        this.adjacencyMatrix = adjacencyMatrix;
+        this.coords = coords;
+        this.distinctVertex = distinctVertex;
+    }
+
     public Graph(int[][] adjacencyMatrix, int[] coords) {
 
         this.adjacencyMatrix = adjacencyMatrix;
         this.coords = coords;
     }
-
 
     public void Visualize(Visualizer visualizer) {
         visualizer.DrawGraph(this);

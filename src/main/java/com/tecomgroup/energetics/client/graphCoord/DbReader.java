@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class DbReader {
-    public ArrayList<Edge> GetGraphs() {
+    public ArrayList<Edge> ReadEdges() {
         Connection connection = null;
         ArrayList<Edge> edges = new ArrayList<Edge>();
         String url = "jdbc:postgresql://127.0.0.1:5432/graphs";
@@ -39,5 +39,12 @@ public class DbReader {
         }
 
         return edges;
+    }
+
+    public ArrayList<ArrayList<Edge>> ReadEdgesList()
+    {
+        ArrayList<ArrayList<Edge>> edgesList = new ArrayList<ArrayList<Edge>>();
+        edgesList.add(this.ReadEdges());
+        return edgesList;
     }
 }
