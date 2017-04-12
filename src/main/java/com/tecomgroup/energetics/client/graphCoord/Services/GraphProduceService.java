@@ -49,13 +49,13 @@ public class GraphProduceService {
 
     }
 
-    /*public ArrayList<IGraph> GetCoordGraphs(ArrayList<int[][]> adjacencyMatrixList) throws Exception {
+    public ArrayList<IGraph> GetCoordGraphsByMatrix(ArrayList<int[][]> adjacencyMatrixList) throws Exception {
         ArrayList<IGraph> graphList = new ArrayList<IGraph>();
         for (int i = 0; i < adjacencyMatrixList.size(); i++) {
             graphList.add(this.GetCoordGraph(adjacencyMatrixList.get(i), adjacencyMatrixList.size()));
         }
         return graphList;
-    }*/
+    }
 
     public ArrayList<IGraph> GetCoordGraphs(ArrayList<ArrayList<Edge>> edgesList) throws Exception {
         ArrayList<IGraph> graphList = new ArrayList<IGraph>();
