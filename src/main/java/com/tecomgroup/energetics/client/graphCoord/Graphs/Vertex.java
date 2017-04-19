@@ -1,17 +1,26 @@
-package com.tecomgroup.energetics.client.graphCoord;
+package com.tecomgroup.energetics.client.graphCoord.Graphs;
 
 public class Vertex {
     public final int size;
     public final String caption;
+    public final int id;
 
-    public Vertex(int size, String caption) {
+    public Vertex(int size, String caption, int id) {
         this.size = size;
         this.caption = caption;
+        this.id = id;
     }
 
-    public Vertex(int size) {
-        this.size = size;
+    public Vertex(int id, String caption) {
+        this.size = 9;
+        this.caption = caption;
+        this.id = id;
+    }
+
+    public Vertex() {
+        this.size = 9;
         this.caption = getRandomWord();
+        this.id = -1;
     }
 
     private String getRandomWord() {

@@ -1,6 +1,7 @@
 package com.tecomgroup.energetics.client.graphCoord;
 
 import com.tecomgroup.energetics.client.graphCoord.Graphs.Edge;
+import com.tecomgroup.energetics.client.graphCoord.Graphs.Vertex;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -8,9 +9,17 @@ import java.util.List;
 import java.util.function.Function;
 
 public class DbReader {
-    public ArrayList<Object> ReadEdges(Function<Connection, List<Object>> getSomething) {
+    public ArrayList<Edge> ReadEdges(){
+        return this.ReadSomething(getEdges);
+    }
+
+    public ArrayList<Vertex> ReadVertex(){
+        return this.ReadSomething(getVertex);
+    }
+
+    private <T> ArrayList<T> ReadSomething(Function<Connection, List<T>> getSomething) {
         Connection connection = null;
-        ArrayList<Object> objects = new ArrayList<Object>();
+        ArrayList<T> objects = new ArrayList<T>();
         String url = "jdbc:postgresql://127.0.0.1:5432/graphs";
         String name = "postgres";
         String password = "admin";
@@ -34,9 +43,11 @@ public class DbReader {
         return objects;
     }
 
-    Function<Connection, List<Object>> getEdges = new Function<Connection, List<Object>>() {
-        public List<Object> apply(Connection connection) {
-            ArrayList<Object> edges = new ArrayList<Object>();
+
+
+    Function<Connection, List<Edge>> getEdges = new Function<Connection, List<Edge>>() {
+        public List<Edge> apply(Connection connection) {
+            ArrayList<Edge> edges = new ArrayList<Edge>();
             try{
                 Statement statement = null;
                 statement = connection.createStatement();
@@ -52,22 +63,22 @@ public class DbReader {
         }
     };
 
-    Function<Connection, List<Object>> getVertex = new Function<Connection, List<Object>>() {
-        public List<Object> apply(Connection connection) {
-            ArrayList<Object> edges = new ArrayList<Object>();
+    Function<Connection, List<Vertex>> getVertex = new Function<Connection, List<Vertex>>() {
+        public List<Vertex> apply(Connection connection) {
+            ArrayList<Vertex> vertex = new ArrayList<Vertex>();
             try{
                 Statement statement = null;
                 statement = connection.createStatement();
                 ResultSet result = statement.executeQuery(
-                        "SELECT * FROM relations");
+                        "SELECT * FROM vertex");
                 while (result.next()) {
-                    edges.add(new Edge(result.getInt("sourceRelations"), result.getInt("receiveRelation")));
+                    vertex.add(new Vertex(result.getInt("id"), result.getString("caption")));
                 }
                 statement.close();
                 result.close();
             } catch (Exception ex){}
-            return edges;
+            return vertex;
         }
     };
-    
+
 }

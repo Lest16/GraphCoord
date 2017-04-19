@@ -9,13 +9,13 @@ public class Graph implements IGraph{
     public final int[][] adjacencyMatrix;
     public int[] coords;
     private Rectangle delineateRectangle;
-    public ArrayList<Integer> distinctVertex;
+    public ArrayList<Vertex> vertex;
 
-    public Graph(int[][] adjacencyMatrix, int[] coords, ArrayList<Integer> distinctVertex) {
+    public Graph(int[][] adjacencyMatrix, int[] coords, ArrayList<Vertex> vertex) {
 
         this.adjacencyMatrix = adjacencyMatrix;
         this.coords = coords;
-        this.distinctVertex = distinctVertex;
+        this.vertex = vertex;
     }
 
     public Graph(int[][] adjacencyMatrix, int[] coords) {

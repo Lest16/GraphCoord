@@ -1,7 +1,9 @@
 package com.tecomgroup.energetics.client.graphCoord.run;
 
 import com.tecomgroup.energetics.client.graphCoord.*;
+import com.tecomgroup.energetics.client.graphCoord.Graphs.Edge;
 import com.tecomgroup.energetics.client.graphCoord.Graphs.IGraph;
+import com.tecomgroup.energetics.client.graphCoord.Graphs.Vertex;
 import com.tecomgroup.energetics.client.graphCoord.Services.GraphProduceService;
 import com.tecomgroup.energetics.client.graphCoord.Services.PackagingService;
 
@@ -11,33 +13,33 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) throws Exception {
         long start = System.currentTimeMillis();
+
         DbReader dbReader = new DbReader();
         Params params = Params.createFromFile("src/main/resources/config");
-        //ArrayList<int[][]> graphList = GraphUtils.readGraphs(String.valueOf(k));
-        ArrayList<int[][]> graphList = new ArrayList<int[][]>();
-        //ArrayList<int[]> sizesVertex = GraphUtils.getSizesVertex();
-        ArrayList<int[]> sizesVertex = new ArrayList<int[]>();
-        ArrayList<ArrayList<Vertex>> allVertices = new ArrayList<ArrayList<Vertex>>();
-        for (int i = 0; i < sizesVertex.size(); i++) {
-            ArrayList<Vertex> vertices = new ArrayList<Vertex>();
-            for (int j = 0; j < sizesVertex.get(i).length; j++) {
-                vertices.add(new Vertex(sizesVertex.get(i)[j]));
-            }
-
-            allVertices.add(vertices);
+        ArrayList<Edge> edges = dbReader.ReadEdges();
+        ArrayList<Vertex> vertices = dbReader.ReadVertex();
+        ArrayList<Vertex> DotList = new ArrayList<Vertex>();
+        ArrayList<Integer> allVertices = new ArrayList<Integer>();
+        for (Edge edge: edges) {
+            allVertices.add(edge.firstVertex);
+            allVertices.add(edge.secondVertex);
         }
 
-        //ArrayList<Integer> sizeDotList = GraphUtils.readDot(String.valueOf(k));
-        ArrayList<Integer> sizeDotList = new ArrayList<Integer>();
+        for (Vertex vertex: vertices) {
+            if (!allVertices.contains(vertex.id)){
+                DotList.add(vertex);
+            }
+        }
+
+        for (Vertex vertex: DotList) {
+            vertices.remove(vertex);
+        }
         int indent = 0;
-        if (sizeDotList.size() != 0) {
+        if (DotList.size() != 0) {
             indent = 70;
         }
-
-        ArrayList<int[][]> adjacencyMatrixList = new ArrayList<int[][]>();
-        adjacencyMatrixList.addAll(graphList);
         GraphProduceService graphProduceService = new GraphProduceService(params, indent);
-        List<IGraph> graphs = graphProduceService.GetCoordGraphs(dbReader.ReadEdgesList());
+        List<IGraph> graphs = graphProduceService.GetCoordGraphs(graphProduceService.DevideEdges(edges), vertices);
         PackagingService packagingService = new PackagingService(params, indent);
         List<IGraph> packedGraphs = packagingService.PackageGraphs(graphs);
         SvgWriter svgWriter = new SvgWriter();
@@ -45,9 +47,9 @@ public class Main {
         for (IGraph graph: packedGraphs) {
             graph.Visualize(visualizer);
         }
-        visualizer.DrawFreeDots(sizeDotList);
+
+        visualizer.DrawFreeDots(DotList);
         visualizer.WriteSvg("result");
-        //System.out.println(String.valueOf(k));
 
 
         long finish = System.currentTimeMillis();

@@ -12,16 +12,16 @@ public class FullGraph implements IGraph{
     public final int indent;
     public final int countVertex;
     private Rectangle delineateRectangle;
-    public ArrayList<Integer> distinctVertex;
+    public ArrayList<Vertex> vertex;
 
-    public FullGraph(int leftX, int rightX, int basicY, int indent, int countVertex, ArrayList<Integer> distinctVertex)
+    public FullGraph(int leftX, int rightX, int basicY, int indent, int countVertex, ArrayList<Vertex> vertex)
     {
         this.leftX = leftX;
         this.rightX = rightX;
         this.basicY = basicY;
         this.indent = indent;
         this.countVertex = countVertex;
-        this.distinctVertex = distinctVertex;
+        this.vertex = vertex;
     }
 
     public FullGraph(int leftX, int rightX, int basicY, int indent, int countVertex)

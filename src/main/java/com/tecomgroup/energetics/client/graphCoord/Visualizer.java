@@ -2,6 +2,7 @@ package com.tecomgroup.energetics.client.graphCoord;
 
 import com.tecomgroup.energetics.client.graphCoord.Graphs.FullGraph;
 import com.tecomgroup.energetics.client.graphCoord.Graphs.Graph;
+import com.tecomgroup.energetics.client.graphCoord.Graphs.Vertex;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class Visualizer {
         svgWriter.addLine(fullGraph.leftX, fullGraph.basicY, fullGraph.rightX, fullGraph.basicY);
         int lastCoordX = fullGraph.leftX;
         for (int i = 0; i < fullGraph.countVertex; ++i) {
-            Vertex vertex = new Vertex(9);
+            Vertex vertex = fullGraph.vertex.get(i);
             if (i % 2 == 0) {
                 svgWriter.addLine(lastCoordX + fullGraph.indent, fullGraph.basicY, lastCoordX + fullGraph.indent,
                         (fullGraph.basicY + fullGraph.indent) - vertex.size);
@@ -60,7 +61,7 @@ public class Visualizer {
                 }
 
         for (int i = 0; i < graph.adjacencyMatrix.length; ++i) {
-            Vertex vertex = new Vertex(9);
+            Vertex vertex = graph.vertex.get(i);
             svgWriter.addCircle(graph.getX(i), graph.getY(i), vertex.size);
             String[] caption = vertex.caption.split(" ");
             int maxLength = vertex.GetMaxLength(caption);
@@ -74,21 +75,20 @@ public class Visualizer {
 
     }
 
-    public void DrawFreeDots(List<Integer> sizeDotList){
+    public void DrawFreeDots(List<Vertex> sizeDotList){
         int position = 10;
         int distance = 0;
         if (sizeDotList.size() != 0) {
             distance = this.width / sizeDotList.size();
         }
         for (int l = 0; l < sizeDotList.size(); ++l) {
-            Vertex vertex = new Vertex(9);
             int y = 18;
-            String[] caption = vertex.caption.split(" ");
+            String[] caption = sizeDotList.get(l).caption.split(" ");
             for (int m = 0; m < caption.length; m++) {
                 svgWriter.addText(position + 10, y, caption[m]);
                 y += 10;
             }
-            Integer size = sizeDotList.get(l);
+            Integer size = sizeDotList.get(l).size;
             svgWriter.addCircle(position, 18, size);
             position += distance;
         }
