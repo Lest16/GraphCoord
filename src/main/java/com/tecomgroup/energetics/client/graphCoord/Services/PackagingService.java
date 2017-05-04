@@ -19,7 +19,7 @@ public class PackagingService {
 
     public List<IGraph> PackageGraphs(List<IGraph> graphs) {
         this.SortGraph(graphs);
-        List<IGraph> packedGraphs = new ArrayList<IGraph>();
+        List<IGraph> packedGraphs = new ArrayList<>();
         int lastIndentY = indent + 40;
         while (graphs.size() != 0) {
             int availableWidth = params.width;

@@ -18,8 +18,8 @@ public class Main {
         Params params = Params.createFromFile("src/main/resources/config");
         ArrayList<Edge> edges = dbReader.ReadEdges();
         ArrayList<Vertex> vertices = dbReader.ReadVertex();
-        ArrayList<Vertex> DotList = new ArrayList<Vertex>();
-        ArrayList<Integer> allVertices = new ArrayList<Integer>();
+        ArrayList<Vertex> DotList = new ArrayList<>();
+        ArrayList<Integer> allVertices = new ArrayList<>();
         for (Edge edge: edges) {
             allVertices.add(edge.firstVertex);
             allVertices.add(edge.secondVertex);

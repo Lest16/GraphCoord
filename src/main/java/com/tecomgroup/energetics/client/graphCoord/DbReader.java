@@ -43,42 +43,36 @@ public class DbReader {
         return objects;
     }
 
-
-
-    Function<Connection, List<Edge>> getEdges = new Function<Connection, List<Edge>>() {
-        public List<Edge> apply(Connection connection) {
-            ArrayList<Edge> edges = new ArrayList<Edge>();
-            try{
-                Statement statement = null;
-                statement = connection.createStatement();
-                ResultSet result = statement.executeQuery(
-                        "SELECT * FROM relations");
-                while (result.next()) {
-                    edges.add(new Edge(result.getInt("sourceRelations"), result.getInt("receiveRelation")));
-                }
-                statement.close();
-                result.close();
-            } catch (Exception ex){}
-            return edges;
-        }
+    Function<Connection, List<Edge>> getEdges = connection -> {
+        ArrayList<Edge> edges = new ArrayList<>();
+        try{
+            Statement statement;
+            statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(
+                    "SELECT * FROM relations");
+            while (result.next()) {
+                edges.add(new Edge(result.getInt("sourceRelations"), result.getInt("receiveRelation")));
+            }
+            statement.close();
+            result.close();
+        } catch (Exception ex){}
+        return edges;
     };
 
-    Function<Connection, List<Vertex>> getVertex = new Function<Connection, List<Vertex>>() {
-        public List<Vertex> apply(Connection connection) {
-            ArrayList<Vertex> vertex = new ArrayList<Vertex>();
-            try{
-                Statement statement = null;
-                statement = connection.createStatement();
-                ResultSet result = statement.executeQuery(
-                        "SELECT * FROM vertex");
-                while (result.next()) {
-                    vertex.add(new Vertex(result.getInt("id"), result.getString("caption")));
-                }
-                statement.close();
-                result.close();
-            } catch (Exception ex){}
-            return vertex;
-        }
+    Function<Connection, List<Vertex>> getVertex = connection -> {
+        ArrayList<Vertex> vertex = new ArrayList<>();
+        try{
+            Statement statement;
+            statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(
+                    "SELECT * FROM vertex");
+            while (result.next()) {
+                vertex.add(new Vertex(result.getInt("id"), result.getString("caption")));
+            }
+            statement.close();
+            result.close();
+        } catch (Exception ex){}
+        return vertex;
     };
 
 }
