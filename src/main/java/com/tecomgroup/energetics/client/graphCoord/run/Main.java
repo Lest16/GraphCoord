@@ -13,7 +13,8 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) throws Exception {
         long start = System.currentTimeMillis();
-
+        Test test = new Test();
+        test.testMethod();
         DbReader dbReader = new DbReader();
         Params params = Params.createFromFile("src/main/resources/config");
         ArrayList<Edge> edges = dbReader.ReadEdges();
