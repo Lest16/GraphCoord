@@ -2,9 +2,6 @@ package com.tecomgroup.energetics.client.graphCoord.Entities;
 
 import javax.persistence.*;
 
-/**
- * Created by uvarov.a on 16.05.2017.
- */
 @Entity
 @Table(name = "vertex", schema = "public", catalog = "graphs")
 public class VertexEntity {

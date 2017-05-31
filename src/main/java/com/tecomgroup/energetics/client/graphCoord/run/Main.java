@@ -1,6 +1,8 @@
 package com.tecomgroup.energetics.client.graphCoord.run;
 
 import com.tecomgroup.energetics.client.graphCoord.*;
+import com.tecomgroup.energetics.client.graphCoord.Entities.RelationsEntity;
+import com.tecomgroup.energetics.client.graphCoord.Entities.VertexEntity;
 import com.tecomgroup.energetics.client.graphCoord.Graphs.Edge;
 import com.tecomgroup.energetics.client.graphCoord.Graphs.IGraph;
 import com.tecomgroup.energetics.client.graphCoord.Graphs.Vertex;
@@ -13,12 +15,20 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) throws Exception {
         long start = System.currentTimeMillis();
-        Test test = new Test();
-        test.testMethod();
         DbReader dbReader = new DbReader();
         Params params = Params.createFromFile("src/main/resources/config");
-        ArrayList<Edge> edges = dbReader.ReadEdges();
-        ArrayList<Vertex> vertices = dbReader.ReadVertex();
+        ArrayList<RelationsEntity> relationsEntities = dbReader.ReadEdges();
+        ArrayList<VertexEntity> vertexEntities = dbReader.ReadVertex();
+        ArrayList<Edge> edges = new ArrayList<>();
+        ArrayList<Vertex> vertices = new ArrayList<>();
+        for (RelationsEntity relationsEntity: relationsEntities) {
+            edges.add(new Edge(relationsEntity.getReceiverelation(), relationsEntity.getSourcerelations()));
+        }
+
+        for (VertexEntity vertexEntity: vertexEntities) {
+            vertices.add(new Vertex(vertexEntity.getId(), vertexEntity.getCaption()));
+        }
+
         ArrayList<Vertex> DotList = new ArrayList<>();
         ArrayList<Integer> allVertices = new ArrayList<>();
         for (Edge edge: edges) {
@@ -35,10 +45,12 @@ public class Main {
         for (Vertex vertex: DotList) {
             vertices.remove(vertex);
         }
+
         int indent = 0;
         if (DotList.size() != 0) {
             indent = 70;
         }
+
         GraphProduceService graphProduceService = new GraphProduceService(params, indent);
         List<IGraph> graphs = graphProduceService.GetCoordGraphs(graphProduceService.DevideEdges(edges), vertices);
         PackagingService packagingService = new PackagingService(params, indent);
@@ -51,8 +63,6 @@ public class Main {
 
         visualizer.DrawFreeDots(DotList);
         visualizer.WriteSvg("result");
-
-
         long finish = System.currentTimeMillis();
         long timeConsumedMillis = finish - start;
         System.out.println(timeConsumedMillis);

@@ -1,78 +1,45 @@
 package com.tecomgroup.energetics.client.graphCoord;
 
-import com.tecomgroup.energetics.client.graphCoord.Graphs.Edge;
-import com.tecomgroup.energetics.client.graphCoord.Graphs.Vertex;
+import com.tecomgroup.energetics.client.graphCoord.Entities.RelationsEntity;
+import com.tecomgroup.energetics.client.graphCoord.Entities.VertexEntity;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
-import java.sql.*;
+import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
 public class DbReader {
-    public ArrayList<Edge> ReadEdges(){
+    public ArrayList<RelationsEntity> ReadEdges(){
         return this.ReadSomething(getEdges);
     }
 
-    public ArrayList<Vertex> ReadVertex(){
+    public ArrayList<VertexEntity> ReadVertex(){
         return this.ReadSomething(getVertex);
     }
 
-    private <T> ArrayList<T> ReadSomething(Function<Connection, List<T>> getSomething) {
-        Connection connection = null;
-        ArrayList<T> objects = new ArrayList<T>();
-        String url = "jdbc:postgresql://127.0.0.1:5432/graphs";
-        String name = "postgres";
-        String password = "admin";
-
-        try {
-            Class.forName("org.postgresql.Driver");
-            connection = DriverManager.getConnection(url, name, password);
-            objects.addAll(getSomething.apply(connection));
-        } catch (Exception ex) {
-            System.out.println(DbReader.class.getName() + ex);
-        } finally {
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException ex) {
-                    System.out.println(DbReader.class.getName() + ex);
-                }
-            }
-        }
-
+    private <T> ArrayList<T> ReadSomething(Function<Session, List<T>> getSomething) {
+        ArrayList<T> objects = new ArrayList();
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        objects.addAll(getSomething.apply(session));
+        session.getTransaction().commit();
+        session.close();
         return objects;
     }
 
-    Function<Connection, List<Edge>> getEdges = connection -> {
-        ArrayList<Edge> edges = new ArrayList<>();
-        try{
-            Statement statement;
-            statement = connection.createStatement();
-            ResultSet result = statement.executeQuery(
-                    "SELECT * FROM relations");
-            while (result.next()) {
-                edges.add(new Edge(result.getInt("sourceRelations"), result.getInt("receiveRelation")));
-            }
-            statement.close();
-            result.close();
-        } catch (Exception ex){}
-        return edges;
+    Function<Session, List<RelationsEntity>> getEdges = session -> {
+        Query query = session.createQuery("FROM RelationsEntity");
+        List<RelationsEntity> relationsEntityList = query.getResultList();
+        return relationsEntityList;
     };
 
-    Function<Connection, List<Vertex>> getVertex = connection -> {
-        ArrayList<Vertex> vertex = new ArrayList<>();
-        try{
-            Statement statement;
-            statement = connection.createStatement();
-            ResultSet result = statement.executeQuery(
-                    "SELECT * FROM vertex");
-            while (result.next()) {
-                vertex.add(new Vertex(result.getInt("id"), result.getString("caption")));
-            }
-            statement.close();
-            result.close();
-        } catch (Exception ex){}
-        return vertex;
+    Function<Session, List<VertexEntity>> getVertex = session -> {
+        Query query = session.createQuery("FROM VertexEntity");
+        List<VertexEntity> verticesList = query.getResultList();
+        return verticesList;
     };
 
 }
