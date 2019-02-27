@@ -1,1 +1,44 @@
-apply plugin:'java'
+buildscript {
+  repositories {
+   jcenter()
+  }
+  dependencies {
+    classpath 'com.bmuschko:gradle-docker-plugin:2.2'
+  }
+}
+
+apply plugin: 'com.bmuschko.docker-remote-api'
+
+jar {
+    baseName = "test"
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    manifest { attributes 'Main-Class': 'java.com.tecomgroup.energetics.client.graphCoord.run.Main.java' }
+}
+ 
+task copyJar(type: Copy) {
+    dependsOn   'jar'
+    from        "build/libs/java.com.tecomgroup.energetics.client.graphCoord-${project.version}.jar"
+    into        'build/docker'
+    rename { String fileName ->
+        fileName.replace("-${project.version}", "")
+    }
+}
+ 
+task buildDockerImage(type: DockerBuildImage) {
+    dependsOn   copyJar
+    if (System.env.DOCKER_HOST) {
+        url = "$System.env.DOCKER_HOST".replace("tcp","https")
+        if (System.env.DOCKER_CERT_PATH) {
+            certPath = new File(System.env.DOCKER_CERT_PATH)
+ 
+        }
+    }
+    else {
+        url = 'unix:///var/run/docker.sock'
+    }
+    inputDir = file('.')
+    tag = 'mesos/elasticsearch-scheduler'
+}
+ 
+build.dependsOn buildDockerImage
+build.dependsOn copyJar
